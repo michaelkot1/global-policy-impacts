@@ -76,6 +76,58 @@ policies:
           sector, so the link is recorded as associated, not causal.
         citations: [lessmann_kramer_2024]
 
+  - slug: ca-lcfs
+    title: California Low Carbon Fuel Standard (LCFS)
+    kind: regulation
+    level: state
+    jurisdiction: CA
+    enacted: "2009"
+    effective: 2011-01-01
+    status: enacted
+    summary: >
+      CARB regulation, one of the early-action measures under the AB 32 Scoping
+      Plan, that sets a declining carbon-intensity benchmark for gasoline, diesel
+      and their substitutes. Fuel providers earn credits for fuels below the
+      benchmark and incur deficits above it. The Board approved it in 2009 and
+      implementation began 2011-01-01; amendments took effect 2013-01-01, the
+      Board re-adopted it effective 2016-01-01 and approved further amendments in
+      2018. The 2018 and later changes are not catalogued separately.
+    url: https://ww2.arb.ca.gov/our-work/programs/low-carbon-fuel-standard/about
+    citations: [carb_lcfs_about]
+    applicability:
+      - jurisdictions: [CA]
+        start: 2011-01-01
+        notes: Implementation date. The Board approved the regulation in 2009 (day not recorded here).
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: A
+        scope: California transportation-sector CO2, average over the 2011-2014 post-period relative to a synthetic California
+        estimate: -9.85
+        low: -13.28
+        high: -9.85
+        unit: percent
+        method: >
+          Peer-reviewed synthetic control (main model), cross-checked with
+          difference-in-differences and Lasso post-double-selection, on a 1997-2014
+          state panel of EPA fossil-fuel combustion CO2 (Huseynov and Palma 2018).
+          The estimate is the synthetic control's average post-treatment effect
+          (-19.7 MMT, a 9.85% reduction). Low and high span the three methods
+          (difference-in-differences -10.95%, Lasso -13.28%), not a confidence
+          interval. The synthetic control is robust to leave-one-out and placebo
+          tests.
+        confidence: 0.5
+        mechanism: >
+          A declining benchmark on the carbon intensity of motor fuels pushes
+          suppliers toward lower-carbon fuels and, through fuel prices, toward less
+          fuel use. The outcome is fossil-fuel combustion CO2, so substituting
+          biofuels lowers the measured figure. Caveats: one study, only four
+          post-treatment years, a significant placebo effect in 2009 that the
+          authors read as anticipation, and overlap with California's vehicle rules
+          and the federal CAFE and fuel standards. The study is recorded on the
+          transportation sector alone and not rescaled to statewide CO2.
+        citations: [huseynov_palma_2018, carb_lcfs_about]
+
   - slug: ca-sb100
     title: California SB 100 (100% clean electricity by 2045)
     kind: state_law
@@ -367,15 +419,33 @@ policies:
       - metric: co2
         direction: decrease
         tier: C
-        scope: electric-power-sector CO2
+        scope: electric-power-sector CO2 in a typical adopting state, seven years after passage
+        estimate: -12.5
+        low: -17
+        high: -8
+        unit: percent
+        method: >
+          Difference-in-differences style event study on a 1990-2015 state panel
+          (Greenstone and Nath, BFI working paper revised June 2026). The paper
+          reports CO2 emissions 8-17% lower seven years after RPS passage and says
+          the result is sensitive to specification. Low and high are that range
+          across specifications, not a confidence interval; the estimate is its
+          midpoint. The paper has been accepted by the Journal of Political
+          Economy Microeconomics but has no journal DOI yet, so it cannot support
+          tier A under the loader's rule.
+        confidence: 0.3
         mechanism: >
           Requires utilities to buy a rising share of renewable electricity, which
-          displaces fossil generation. A difference-in-differences style working
-          paper (Greenstone and Nath, BFI 2019-62, July 2024 update; not yet
-          peer reviewed) reports electricity prices about 11% higher and carbon
-          emissions 11-24% lower seven years after RPS passage, with estimates
-          that vary by specification. A peer-reviewed study evaluates how RPS
-          stringency and design affect renewable generation rather than CO2. Until
-          a peer-reviewed estimate is available, or this site's own event study
-          is run, the link is recorded as associated (tier C).
-        citations: [greenstone_nath_2024, carley_2018]
+          displaces fossil generation. The main estimate is the working paper
+          above (the July 2024 version reported 11-24%; the June 2026 revision
+          narrowed it to 8-17%). Other evidence is mixed: Martin and Saikawa
+          (2017), a peer-reviewed 1990-2014 panel regression, associates a binding
+          RPS with about 1.2 million fewer tons of power-sector CO2 per state-year
+          (p<0.05, not framed as causal); Deschenes, Malloy and McDonald (2023)
+          find RPS raised wind capacity by about 21% (600-700 MW) with no solar
+          effect, but do not estimate CO2; and a working paper by Azevedo and Sun
+          (October 2025) finds offsetting channels and no statistically
+          significant net effect on emissions. Until a peer-reviewed causal
+          estimate is available, or this site's own event study is run, the link
+          is recorded as associated (tier C).
+        citations: [greenstone_nath_2026, martin_saikawa_2017, deschenes_2023, carley_2018, azevedo_sun_2025]

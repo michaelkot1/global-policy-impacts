@@ -20,6 +20,31 @@ Definition (v1)
           5-10%    -> 3
           10-20%   -> 4
           >= 20%   -> 5
+
+Every policy-metric link has a score. ``score_basis`` records what it rests on,
+so a reader can tell a measured effect from the absence of one:
+
+    ``estimate``     binned from a percent estimate (tiers A, B and C). The
+                     evidence tier says how far to trust it.
+    ``projection``   binned from a modelled projection (tier D only); nothing
+                     has been measured.
+    ``never_bound``  the policy never applied to anyone (stayed or vacated
+                     before compliance), so its effect is zero by construction.
+    ``unquantified`` nobody has quantified the effect; the score is 0 and means
+                     "no quantified effect", **not** "no effect". Show it as
+                     "not estimated".
+
+Confidence (0-1) is how far to trust the estimate itself, and is set by hand
+for every ``estimate`` and ``projection`` link (it is NULL otherwise). Rubric:
+
+    0.7-1.0   several independent studies agree on sign and rough size
+    0.4-0.7   one or two credible studies, robust across the checks they report
+    0.2-0.4   one study with fragile, specification-sensitive or conflicting
+              results, or an unfinished (not yet DOI-bearing) paper
+    < 0.2     a model projection, or evidence that is largely indirect
+
+Tiers describe the *design* of the evidence and confidence describes this
+particular number; the two are reported side by side and never combined.
 """
 
 from __future__ import annotations
@@ -33,6 +58,20 @@ BINS: tuple[tuple[float, int], ...] = (
     (20.0, 4),
 )
 MAX_MAGNITUDE = 5
+
+SCORE_BASES = ("estimate", "projection", "never_bound", "unquantified")
+
+
+def score_basis(tier: str, has_estimate: bool, never_bound: bool) -> str:
+    """Return the ``score_basis`` for a link.
+
+    A link with a number rests on ``estimate`` (tiers A-C) or ``projection``
+    (tier D). One without a number is ``never_bound`` if the policy never
+    applied to anyone, and ``unquantified`` otherwise.
+    """
+    if has_estimate:
+        return "projection" if tier == "D" else "estimate"
+    return "never_bound" if never_bound else "unquantified"
 
 
 def impact_score(percent_change: float, higher_is_better: bool) -> float:

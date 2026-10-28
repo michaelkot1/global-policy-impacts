@@ -4,6 +4,26 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · evidence
+
+Added published effect estimates with citations and gave all 31 policy-CO₂ links an evidence tier and an impact score. Two links are tier A: RGGI (−19.4 %, Murray and Maniloff 2015) and a new California Low Carbon Fuel Standard record (−9.85 % of transportation CO₂, Huseynov and Palma 2018); state RPS (tier C, −12.5 %) and the IRA (tier D, −12.5 %, a modelled 2030 projection) also carry estimates. The other 27 links have no quantified effect, so they score 0 with `score_basis` of `unquantified` (24) or `never_bound` (3), and `policy_effects.impact_score` is now NOT NULL.
+
+**Issues**
+
+- A score of 0 with basis `unquantified` means "not estimated", not "no effect". 24 of 31 links are in that state because I found no peer-reviewed CO₂ estimate for them, so the web app must show those as "not estimated" and never rank them as zero-impact. I added `policy_effects.score_basis` (`estimate`, `projection`, `never_bound`, `unquantified`) so this is explicit; the plan's data model did not list it.
+- Only two links are tier A, because that is all the literature supports. Close misses: California cap-and-trade stays tier C (Lessmann and Kramer 2024 find power-sector emissions 48 % below a synthetic control but industry 6 % above, say complementary policies drove the power result, and rate it the less robust of the two), and state RPS stays tier C. Greenstone and Nath is now accepted by the Journal of Political Economy Microeconomics but has no journal DOI, so it fails the loader's "tier A needs a peer-reviewed DOI" rule; promote it when the DOI appears. The June 2026 revision narrowed its CO₂ result to 8–17 % (the catalog had 11–24 % from the 2024 draft), and I updated the record.
+- The RPS estimate (−12.5 %) is the midpoint of a range across specifications, and `effect_low` and `effect_high` hold that range (and, for LCFS, the range across three methods), not a confidence interval. The schema comment and each `method` text say so, but the web app should not label them "95 % CI" unless the source gave one.
+- Loader rules changed: tiers A and B must carry a percent estimate, tier C may, and tier D may only for a modelled projection. An estimate needs unit `percent`, a `method` and a hand-set `confidence` (rubric in `scoring.py`); a policy with no applicability rows cannot carry an estimate. The `confidence` values are my judgement, so please review them (RGGI 0.6, LCFS 0.5, RPS 0.3, IRA 0.15).
+- Scores are scoped to what each estimate measures, not rescaled to statewide CO₂: LCFS is transportation CO₂ only, RGGI and RPS are power-sector CO₂, and the IRA figure is all greenhouse gases for 2030. LCFS lands at +3 only because −9.85 % sits just below the 10 % bin edge (the DiD result, −10.95 %, would score +4).
+- The IRA projection is for the law as passed in 2022; the 2025 reconciliation law curtailed it, so it likely overstates the current effect.
+- MATS has a peer-reviewed estimate of coal burned (6.4 million short tons less, 0.6 % of 2014 production; Coglianese, Gerarden and Stock 2020), but I did not convert it to CO₂ because replacement gas generation is not netted out, so it stays unquantified. It is cited in the record.
+- A search result for an RPS "Climatica" paper claiming a 4.3–9.6 % CO₂ intensity cut looked fabricated (the author affiliations are institutes that do not appear to exist), so I did not use it.
+- `policy_effects` is still UNIQUE(policy_id, metric_id), so the site's own tier-B event-study row cannot sit beside these published rows; the "show the published estimate first" idea from the plan still needs that schema decision.
+- A new LCFS record was added (31 policies, was 30) because it is the only other policy with a clean peer-reviewed estimate. Its enactment date is year precision (2009) because the CARB page gives no day, and amendments after 2016 are not catalogued separately.
+- I left the uncommitted `.env.example` change (real API keys in a tracked file, noted in the ingest-co2 entry) out of this commit; those keys should be rotated and moved to `.env`.
+
+---
+
 ## 2026-10-28 · policy-catalog
 
 Wrote a hand-curated catalog of 30 policies in `data/policies/*.yaml` (17 federal, 10 state, 1 interstate, 2 international), plus a source registry (`_sources.yaml`, 26 sources) and a citation registry (`_citations.yaml`, ~65 documents with DOIs or official URLs). `pipeline/policies/load.py` validates the whole catalog before writing (all errors reported at once: unknown states, bad dates, overlapping applicability, kind/level mismatches, uncited effects, and evidence-tier rules such as "tier A needs a peer-reviewed citation with a DOI") and then upserts it into SQLite; `build_db.py` now calls it, giving 818 per-state applicability rows. Each policy's CO₂ link carries an evidence tier and at least one citation; only RGGI reaches tier A (−19.4 %, impact score +4, via `pipeline/policies/scoring.py`), and the rest are tier C or D with no numeric estimate.

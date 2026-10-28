@@ -131,12 +131,18 @@ CREATE TABLE IF NOT EXISTS policy_effects (
     evidence_tier   TEXT    NOT NULL DEFAULT 'D'
                         CHECK (evidence_tier IN ('A', 'B', 'C', 'D')),
     effect_estimate REAL,              -- point estimate (percent change)
-    effect_low      REAL,              -- lower bound of CI
-    effect_high     REAL,              -- upper bound of CI
+    effect_low      REAL,              -- lower bound: the CI where the source reports one, else the
+                                       -- range across specifications (the 'method' text says which)
+    effect_high     REAL,              -- upper bound, as for effect_low
     effect_unit     TEXT,              -- e.g. 'percent', 'MtCO2', 'MtCO2/yr'
     method          TEXT,              -- e.g. 'diff-in-diff', 'synthetic control', 'event study'
-    impact_score    REAL CHECK (impact_score BETWEEN -5 AND 5),
-    confidence      REAL CHECK (confidence BETWEEN 0 AND 1),
+    -- Size of effect on a -5..+5 scale (pipeline/policies/scoring.py). Every link has one;
+    -- 'score_basis' says what it rests on, and 0 with basis 'unquantified' means "no
+    -- quantified effect", NOT "no effect".
+    impact_score    REAL    NOT NULL CHECK (impact_score BETWEEN -5 AND 5),
+    score_basis     TEXT    NOT NULL DEFAULT 'unquantified'
+                        CHECK (score_basis IN ('estimate', 'projection', 'never_bound', 'unquantified')),
+    confidence      REAL CHECK (confidence BETWEEN 0 AND 1),  -- trust in the estimate; NULL if none
     UNIQUE (policy_id, metric_id)
 );
 CREATE INDEX IF NOT EXISTS idx_pe_policy ON policy_effects(policy_id);

@@ -58,6 +58,11 @@ Policy record
           estimate / low / high / unit / method / confidence
           citations: [keys]                # at least one
 
+    ``estimate`` is a percent change in the metric attributable to the policy (negative
+    means the metric fell). ``low`` and ``high`` are the confidence interval when the
+    source reports one, otherwise the range across specifications, and ``method`` says
+    which. Leave all of them out when nobody has quantified the effect.
+
 Dates
 -----
 ISO 8601. ``YYYY`` and ``YYYY-MM`` are accepted for imprecise dates: start and
@@ -68,9 +73,16 @@ Evidence rules checked by the loader
 ------------------------------------
 * Every effect cites at least one source that exists in the citations registry.
 * Tier A requires a peer-reviewed citation with a DOI.
-* Only tiers A and B may carry an effect estimate (C and D are descriptive).
-* A percent estimate is converted to an impact score (see ``policies/scoring.py``);
-  evidence strength is never folded into that score.
+* Tiers A and B must carry a percent estimate (that is what the tier certifies). Tier C
+  may carry one (an associated, non-causal change) and tier D only a modelled
+  projection; both may also have none.
+* An estimate needs a unit of ``percent``, a ``method`` and a ``confidence`` (0-1,
+  rubric in ``policies/scoring.py``); a link without an estimate has no confidence.
+* A policy with no applicability rows never bound anyone, so it cannot carry an estimate.
+* Every effect gets an impact score and a ``score_basis`` (see ``policies/scoring.py``):
+  a percent estimate is binned into -5..+5, a never-bound policy scores 0 by
+  construction, and a link nobody has quantified scores 0 with basis ``unquantified``
+  ("not estimated", not "no effect"). Evidence strength is never folded into the score.
 """
 
 from __future__ import annotations
@@ -91,7 +103,7 @@ import yaml
 
 import seed
 
-from .scoring import impact_score
+from .scoring import impact_score, score_basis
 
 logger = logging.getLogger(__name__)
 
@@ -530,13 +542,19 @@ def _prepare_policy(
             estimate = low = high = confidence = None
         unit = _text(eff.get("unit"))
         has_numbers = any(v is not None for v in (estimate, low, high))
-        if has_numbers and tier not in ("A", "B"):
-            errors.append(f"{eff_where}: tier {tier} is descriptive; only tiers A and B may carry an estimate")
+        if tier in ("A", "B") and estimate is None:
+            errors.append(f"{eff_where}: tier {tier} must carry a percent 'estimate'")
+        if has_numbers and not applicability:
+            errors.append(f"{eff_where}: the policy never bound anyone (no applicability), so it cannot carry an estimate")
         if (low is not None or high is not None) and estimate is None:
             errors.append(f"{eff_where}: 'low'/'high' need an 'estimate'")
+        if estimate is None and (unit or eff.get("method") or confidence is not None):
+            errors.append(f"{eff_where}: 'unit', 'method' and 'confidence' only go with an 'estimate'")
         if estimate is not None:
-            if not unit:
-                errors.append(f"{eff_where}: an estimate needs a 'unit'")
+            if unit != "percent":
+                errors.append(f"{eff_where}: an estimate needs unit 'percent' (the impact score is binned from percent change)")
+            if confidence is None:
+                errors.append(f"{eff_where}: an estimate needs a 'confidence' between 0 and 1")
             if low is not None and low > estimate:
                 errors.append(f"{eff_where}: low {low} is above the estimate {estimate}")
             if high is not None and high < estimate:
@@ -558,9 +576,10 @@ def _prepare_policy(
         ):
             errors.append(f"{eff_where}: tier A needs a peer-reviewed citation with a DOI")
 
-        score = None
+        score = 0.0
         if estimate is not None and unit == "percent":
             score = impact_score(estimate, higher_is_better)
+        basis = score_basis(tier, estimate is not None, never_bound=not applicability)
         effects.append(
             {
                 "metric_id": metric_id,
@@ -574,6 +593,7 @@ def _prepare_policy(
                 "unit": unit,
                 "method": _text(eff.get("method")),
                 "impact_score": score,
+                "score_basis": basis,
                 "confidence": confidence,
                 "citations": list(eff_citations),
                 "metric": metric_slug,
@@ -754,11 +774,11 @@ def _write(conn: sqlite3.Connection, prepared: Prepared) -> dict[str, int]:
             effect_id = conn.execute(
                 "INSERT INTO policy_effects (policy_id, metric_id, mechanism, scope, expected_direction, "
                 "evidence_tier, effect_estimate, effect_low, effect_high, effect_unit, method, "
-                "impact_score, confidence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "impact_score, score_basis, confidence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     policy_id, eff["metric_id"], eff["mechanism"], eff["scope"], eff["direction"],
                     eff["tier"], eff["estimate"], eff["low"], eff["high"], eff["unit"], eff["method"],
-                    eff["impact_score"], eff["confidence"],
+                    eff["impact_score"], eff["score_basis"], eff["confidence"],
                 ),
             ).lastrowid
             conn.executemany(
@@ -817,6 +837,10 @@ def summarize(conn: sqlite3.Connection) -> str:
     block(
         "Effects by evidence tier:",
         "SELECT evidence_tier, count(*) FROM policy_effects GROUP BY evidence_tier ORDER BY 1",
+    )
+    block(
+        "Impact scores by basis:",
+        "SELECT score_basis, count(*) FROM policy_effects GROUP BY score_basis ORDER BY 2 DESC, 1",
     )
     n_app = conn.execute("SELECT count(*) FROM policy_applicability").fetchone()[0]
     lines.append(f"Applicability rows: {n_app}")
