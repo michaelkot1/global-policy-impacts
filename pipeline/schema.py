@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS policy_effects (
     policy_id       INTEGER NOT NULL REFERENCES policies(id),
     metric_id       INTEGER NOT NULL REFERENCES metrics(id),
     mechanism       TEXT,              -- how the policy is expected to affect the metric
+    scope           TEXT,              -- what the estimate is measured on, e.g. 'electric-power-sector CO2, RGGI states'
     expected_direction TEXT CHECK (expected_direction IN ('increase', 'decrease', 'ambiguous')),
     evidence_tier   TEXT    NOT NULL DEFAULT 'D'
                         CHECK (evidence_tier IN ('A', 'B', 'C', 'D')),
@@ -140,6 +141,15 @@ CREATE TABLE IF NOT EXISTS policy_effects (
 );
 CREATE INDEX IF NOT EXISTS idx_pe_policy ON policy_effects(policy_id);
 CREATE INDEX IF NOT EXISTS idx_pe_metric ON policy_effects(metric_id);
+
+-- ── Policy ↔ citation link ─────────────────────────────────────────────
+-- Documents that establish the policy itself (statute / rule text, dates,
+-- applicability).  Evidence about *effects* is linked via policy_effect_citations.
+CREATE TABLE IF NOT EXISTS policy_citations (
+    policy_id   INTEGER NOT NULL REFERENCES policies(id),
+    citation_id INTEGER NOT NULL REFERENCES citations(id),
+    PRIMARY KEY (policy_id, citation_id)
+);
 
 -- ── Policy-effect ↔ citation link ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS policy_effect_citations (

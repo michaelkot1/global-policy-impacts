@@ -1,0 +1,381 @@
+# State laws and regulations. See federal.yaml for conventions.
+#
+# For state policies, `applicability.start` is the date the legal requirement
+# took effect, or the first compliance period where the program sets one
+# (for example California cap-and-trade, Washington's Climate Commitment Act).
+
+policies:
+
+  # ── California ─────────────────────────────────────────────────────────
+  - slug: ca-ab32
+    title: California Global Warming Solutions Act of 2006 (AB 32)
+    kind: state_law
+    level: state
+    jurisdiction: CA
+    enacted: 2006-09-27
+    effective: 2007-01-01
+    status: enacted
+    summary: >
+      Requires California to return statewide greenhouse-gas emissions to 1990
+      levels by 2020 and gave CARB authority to adopt a scoping plan and
+      regulations, including the cap-and-trade program. SB 32 (2016) set a 40%
+      below 1990 target for 2030. The target covers all greenhouse gases, not
+      only energy-related CO2.
+    url: https://ww2.arb.ca.gov/resources/fact-sheets/ab-32-global-warming-solutions-act-2006
+    citations: [carb_ab32_fact_sheet]
+    applicability:
+      - jurisdictions: [CA]
+        start: 2007-01-01
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: C
+        scope: California statewide greenhouse-gas emissions (all gases)
+        mechanism: >
+          The statewide cap target drives a package of regulations (cap-and-trade,
+          low-carbon fuel standard, renewable portfolio standard, vehicle
+          standards). CARB's inventory shows statewide emissions fell below the
+          1990 level in 2016, before the 2020 deadline. That is a descriptive
+          trend: it cannot separate AB 32 from the economy, federal vehicle
+          standards or other state policies.
+        citations: [carb_ghg_inventory, carb_ab32_fact_sheet]
+
+  - slug: ca-cap-and-trade
+    title: California cap-and-trade program (Cap-and-Invest)
+    kind: regulation
+    level: state
+    jurisdiction: CA
+    enacted: 2011-10-20
+    effective: 2012-01-01
+    status: enacted
+    summary: >
+      CARB's economy-wide declining cap on covered emitters under AB 32. Adopted
+      2011-10-20, first compliance period began 2013-01-01, and linked with
+      Quebec's market from 2014. Authority was extended to 2030 in 2017 (AB 398)
+      and, as the renamed Cap-and-Invest program, to 2045 by AB 1207 and SB 840
+      (signed 2025-09-19).
+    url: https://ww2.arb.ca.gov/our-work/programs/cap-and-trade-program
+    citations: [carb_cap_and_trade, ca_ab1207_text]
+    applicability:
+      - jurisdictions: [CA]
+        start: 2013-01-01
+        notes: First compliance period (the program started trading in 2012).
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: C
+        scope: electric-power-sector and industrial CO2 per capita, California
+        mechanism: >
+          An allowance price on covered emissions raises the cost of fossil
+          energy and industrial emissions. A synthetic-control study of
+          2005-2019 state data finds California's per-capita power-sector
+          emissions ended 48% below the synthetic control, while industrial
+          emissions ended 6% above it. The authors attribute the power-sector gap
+          mainly to complementary policies and a shift from gas to renewables,
+          and conclude cap-and-trade did not deliver decarbonization in either
+          sector, so the link is recorded as associated, not causal.
+        citations: [lessmann_kramer_2024]
+
+  - slug: ca-sb100
+    title: California SB 100 (100% clean electricity by 2045)
+    kind: state_law
+    level: state
+    jurisdiction: CA
+    enacted: 2018-09-10
+    effective: 2019-01-01
+    status: enacted
+    summary: >
+      Raised California's renewable portfolio standard to 60% by 2030 and set a
+      goal of 100% renewable and zero-carbon electricity retail sales by 2045.
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201720180SB100
+    citations: [ca_sb100_text]
+    applicability:
+      - jurisdictions: [CA]
+        start: 2019-01-01
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Higher required shares of renewable and zero-carbon electricity displace
+          fossil generation. Interim targets are recent; no measured effect is
+          recorded.
+        citations: [ca_sb100_text]
+
+  - slug: ca-zev-program
+    title: California Zero-Emission Vehicle (ZEV) program
+    kind: regulation
+    level: state
+    jurisdiction: CA
+    enacted: 1990-09
+    status: enacted
+    summary: >
+      CARB's ZEV regulation, adopted in 1990 with the first low-emission-vehicle
+      rules, requires automakers to deliver a rising share of zero-emission
+      vehicles in California. The percentage requirements have been revised
+      several times (including in 1996 and 2003 and under the 2012 Advanced Clean
+      Cars package), so the adoption date is not a clean treatment date. Other
+      states can adopt California's standards under Clean Air Act section 177;
+      those states are not enumerated here.
+    url: https://ww2.arb.ca.gov/our-work/programs/zero-emission-vehicle-program/about
+    citations: [carb_zev_program]
+    applicability:
+      - jurisdictions: [CA]
+        start: 1990-09
+        notes: Adoption date. The requirement structure was restructured repeatedly afterwards.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: transportation-sector CO2
+        mechanism: >
+          Sales requirements raise electric vehicle penetration, displacing
+          gasoline. The CO2 effect depends on the carbon intensity of the
+          electricity used and on what vehicles would otherwise have been sold.
+        citations: [carb_zev_program]
+
+  - slug: ca-acc-ii
+    title: California Advanced Clean Cars II (ACC II)
+    kind: regulation
+    level: state
+    jurisdiction: CA
+    enacted: 2022-08-25
+    status: blocked
+    summary: >
+      CARB regulation requiring new light-duty sales to reach 100% ZEV and plug-in
+      hybrids by model year 2035. EPA granted the Clean Air Act waiver in a
+      notice published 2025-01-06. Congress disapproved the waiver under the
+      Congressional Review Act (Pub. L. 119-16, signed 2025-06-12); California
+      is challenging this in court, and CARB has adopted emergency regulations
+      (effective 2025-10-02) continuing earlier standards. The 2035 mandate is not
+      in effect.
+    url: http://ww2.arb.ca.gov/our-work/programs/drive-forward-light-duty-vehicle-program/advanced-clean-cars
+    citations: [carb_advanced_clean_cars, hjres88_acc2, wh_2025_06_12_statement]
+    applicability:
+      - jurisdictions: [CA]
+        start: 2025-01-06
+        end: 2025-06-12
+        notes: Period during which the EPA waiver was in force. Other states that planned to adopt ACC II under section 177 are not enumerated.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: transportation-sector CO2
+        mechanism: >
+          Phasing in a 100% zero-emission new-vehicle requirement would cut
+          tailpipe CO2 as the fleet turns over. The waiver was disapproved before
+          any model year was enforced, so no effect is expected from the
+          regulation as written.
+        citations: [carb_advanced_clean_cars, hjres88_acc2]
+
+  # ── Other states ───────────────────────────────────────────────────────
+  - slug: ny-clcpa
+    title: New York Climate Leadership and Community Protection Act (CLCPA)
+    kind: state_law
+    level: state
+    jurisdiction: NY
+    enacted: 2019-07-18
+    status: enacted
+    summary: >
+      Sets statewide limits of 40% below 1990 greenhouse-gas emissions by 2030
+      and 85% by 2050, a 70% renewable electricity target by 2030 and
+      zero-emission electricity by 2040, and created the Climate Action Council.
+      Provisions take effect on different dates, so applicability starts at
+      signing.
+    url: https://legislation.nysenate.gov/pdf/bills/2019/S6599
+    citations: [ny_clcpa_text]
+    applicability:
+      - jurisdictions: [NY]
+        start: 2019-07-18
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Binding statewide emission limits and sector targets drive regulation of
+          electricity, buildings and transport. Most limits start in 2030; no
+          measured effect is recorded.
+        citations: [ny_clcpa_text]
+
+  - slug: wa-climate-commitment-act
+    title: Washington Climate Commitment Act (cap-and-invest)
+    kind: state_law
+    level: state
+    jurisdiction: WA
+    enacted: 2021-05-17
+    effective: 2021-07-25
+    status: enacted
+    summary: >
+      SB 5126 created an economy-wide declining cap on greenhouse-gas emissions
+      for large emitters, with allowances sold at auction. The program began on
+      2023-01-01 and held its first auction in February 2023.
+    url: https://ecology.wa.gov/air-climate/climate-commitment-act
+    citations: [wa_sb5126, wa_cca_program]
+    applicability:
+      - jurisdictions: [WA]
+        start: 2023-01-01
+        notes: First compliance period.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          A declining cap and allowance price raise the cost of fossil fuel
+          combustion. Too recent for a measured effect.
+        citations: [wa_sb5126, wa_cca_program]
+
+  - slug: wa-clean-energy-transformation-act
+    title: Washington Clean Energy Transformation Act (CETA)
+    kind: state_law
+    level: state
+    jurisdiction: WA
+    enacted: 2019-05-07
+    effective: 2019-07-28
+    status: enacted
+    summary: >
+      SB 5116 requires utilities to stop serving customers with coal-fired
+      electricity by end-2025, to be greenhouse-gas neutral by 2030 and to
+      supply 100% renewable or non-emitting electricity by 2045.
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5116&Year=2019
+    citations: [wa_sb5116]
+    applicability:
+      - jurisdictions: [WA]
+        start: 2019-07-28
+        notes: Legal effective date; the main compliance milestones are 2025, 2030 and 2045.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Sets a binding schedule that removes coal from the retail mix and moves
+          utilities toward non-emitting supply.
+        citations: [wa_sb5116]
+
+  - slug: va-clean-economy-act
+    title: Virginia Clean Economy Act (VCEA)
+    kind: state_law
+    level: state
+    jurisdiction: VA
+    enacted: 2020-04-11
+    effective: 2020-07-01
+    status: enacted
+    summary: >
+      HB 1526 / SB 851 sets a mandatory renewable portfolio standard that reaches
+      100% carbon-free electricity by 2045 for Dominion Energy Virginia (2050 for
+      Appalachian Power), authorizes participation in RGGI, and requires
+      retirement of most fossil generation. Catalogued apart from the multi-state
+      renewable portfolio standard record because it is a clean-energy standard.
+    url: https://lis.virginia.gov/bill-details/20201/HB1526
+    citations: [va_hb1526]
+    applicability:
+      - jurisdictions: [VA]
+        start: 2020-07-01
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Mandatory clean-electricity shares and fossil retirement schedules
+          displace fossil generation over 2020-2050.
+        citations: [va_hb1526]
+
+  # ── Renewable portfolio standards (many states, one record) ────────────
+  - slug: state-rps
+    title: State renewable portfolio standards (RPS) and clean energy standards
+    kind: state_law
+    level: state
+    jurisdiction: US
+    enacted: 1983
+    status: enacted
+    summary: >
+      One record covering the separate statewide renewable portfolio standards
+      of about 30 states and DC, each adopted by its own law or commission order
+      and revised many times since. `jurisdiction: US` stands for "many states";
+      each state's start date is in the applicability rows. Start dates are the
+      Berkeley Lab "year of RPS enactment" (2016 chart), given at year precision
+      and set to January 1; notes flag where a state's binding standard came
+      later. End dates mark states that repealed or weakened the standard to a
+      voluntary goal. Washington's earlier RPS is included here while its 2019
+      clean-energy law is a separate record; Virginia and California's SB 100 are
+      separate records. Kansas's standard became voluntary in 2015, Texas
+      repealed its in 2023 (with a solar-only standard to September 2025) and
+      Arizona's regulator voted to eliminate its standard in 2026; these end
+      dates should be checked against the latest Berkeley Lab data.
+    url: https://emp.lbl.gov/projects/renewables-portfolio
+    citations:
+      - barbose_2016_rps_chart
+      - barbose_2025_resource_standards
+      - eia_rps_snapshot
+      - ncsl_rps
+      - dsire_rps
+      - climate_policy_dashboard_ces
+    applicability:
+      - jurisdictions: [IA]
+        start: "1983"
+        notes: Iowa's standard is a capacity requirement (105 MW) on investor-owned utilities, not a percentage of sales.
+      - jurisdictions: [MN]
+        start: "1994"
+        notes: Berkeley Lab date reflects a utility-specific mandate; the statewide standard (Minn. Stat. 216B.1691) came in 2007.
+      - jurisdictions: [AZ]
+        start: "1996"
+        end: "2026"
+        notes: Berkeley Lab date reflects the regulator's Environmental Portfolio Standard; the Renewable Energy Standard and Tariff rules date from 2006-2007. The state regulator voted in 2026 to eliminate the standard (per State Climate Policy Dashboard; confirm the exact date).
+      - jurisdictions: [MA, ME, NV]
+        start: "1997"
+      - jurisdictions: [CT, WI]
+        start: "1998"
+      - jurisdictions: [PA]
+        start: "1998"
+        notes: Berkeley Lab date. The binding Alternative Energy Portfolio Standard is Act 213 of 2004.
+      - jurisdictions: [NJ]
+        start: "1999"
+      - jurisdictions: [TX]
+        start: "1999"
+        end: 2025-09
+        notes: Texas repealed the standard in 2023 (HB 1500), leaving a temporary solar-only standard to September 2025 (per State Climate Policy Dashboard). Installed capacity targets were exceeded years earlier.
+      - jurisdictions: [NM]
+        start: "2000"
+        notes: Berkeley Lab date. New Mexico's Renewable Energy Act dates from 2004.
+      - jurisdictions: [CA]
+        start: "2002"
+        notes: SB 1078. Raised repeatedly (SB 107 in 2006, SB 350 in 2015, SB 100 in 2018 catalogued separately).
+      - jurisdictions: [CO, HI, MD, NY, RI]
+        start: "2004"
+      - jurisdictions: [DC, DE, MT]
+        start: "2005"
+      - jurisdictions: [WA]
+        start: "2006"
+        notes: Initiative 937. The 2019 Clean Energy Transformation Act is a separate record.
+      - jurisdictions: [IL, NH, NC, OR]
+        start: "2007"
+      - jurisdictions: [MI, MO, OH]
+        start: "2008"
+        notes: Ohio reduced its standard in 2019 (HB 6).
+      - jurisdictions: [KS]
+        start: "2009"
+        end: "2015"
+        notes: Standard became a voluntary goal in 2015.
+      - jurisdictions: [VT]
+        start: "2015"
+        notes: Berkeley Lab date marks the mandatory renewable energy standard (a 2005 goal preceded it).
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: C
+        scope: electric-power-sector CO2
+        mechanism: >
+          Requires utilities to buy a rising share of renewable electricity, which
+          displaces fossil generation. A difference-in-differences style working
+          paper (Greenstone and Nath, BFI 2019-62, July 2024 update; not yet
+          peer reviewed) reports electricity prices about 11% higher and carbon
+          emissions 11-24% lower seven years after RPS passage, with estimates
+          that vary by specification. A peer-reviewed study evaluates how RPS
+          stringency and design affect renewable generation rather than CO2. Until
+          a peer-reviewed estimate is available, or this site's own event study
+          is run, the link is recorded as associated (tier C).
+        citations: [greenstone_nath_2024, carley_2018]

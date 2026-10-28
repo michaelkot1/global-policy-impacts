@@ -1,0 +1,164 @@
+# Registry of publishers / data sources referenced by the policy catalog.
+# Files starting with "_" are registries, not policy files; see
+# pipeline/policies/load.py for the full format.
+#
+# Each entry becomes a row in the `sources` table (matched by `name`).
+# The three core data sources (EIA, Census, BEA) are seeded by pipeline/seed.py
+# and are not repeated here.
+
+sources:
+  govinfo:
+    name: GovInfo
+    publisher: U.S. Government Publishing Office
+    url: https://www.govinfo.gov/
+    description: Official text of U.S. public laws and the Statutes at Large.
+
+  congress_gov:
+    name: Congress.gov
+    publisher: Library of Congress
+    url: https://www.congress.gov/
+    description: Federal legislation, joint resolutions and Congressional Research Service reports.
+
+  federal_register:
+    name: Federal Register
+    publisher: Office of the Federal Register, National Archives
+    url: https://www.federalregister.gov/
+    description: Executive orders and federal agency rules, with publication and effective dates.
+
+  us_courts:
+    name: U.S. court orders and opinions
+    publisher: Supreme Court of the United States; U.S. Court of Appeals for the D.C. Circuit
+    url: https://www.supremecourt.gov/
+    description: Orders and opinions that stayed or vacated federal rules.
+
+  epa:
+    name: U.S. EPA program and rule pages
+    publisher: U.S. Environmental Protection Agency
+    url: https://www.epa.gov/
+    description: Program summaries, regulatory histories and guidance memoranda.
+
+  white_house:
+    name: White House presidential actions
+    publisher: Executive Office of the President
+    url: https://www.whitehouse.gov/presidential-actions/
+    description: Text of executive orders and signing statements.
+
+  rggi:
+    name: RGGI, Inc. program design archive
+    publisher: Regional Greenhouse Gas Initiative, Inc.
+    url: https://www.rggi.org/program-overview-and-design/design-archive
+    description: Memorandum of Understanding, model rules, and participation history of RGGI states.
+
+  carb:
+    name: California Air Resources Board
+    publisher: California Air Resources Board (CARB)
+    url: https://ww2.arb.ca.gov/
+    description: AB 32 implementation, cap-and-trade, vehicle regulations and the state GHG inventory.
+
+  ca_legislature:
+    name: California Legislative Information
+    publisher: California Legislature
+    url: https://leginfo.legislature.ca.gov/
+    description: Official text and history of California bills.
+
+  ny_legislature:
+    name: New York State Senate legislation
+    publisher: New York State Senate
+    url: https://legislation.nysenate.gov/
+    description: Official text and history of New York bills.
+
+  wa_ecology:
+    name: Washington Department of Ecology
+    publisher: Washington State Department of Ecology
+    url: https://ecology.wa.gov/
+    description: Climate Commitment Act program pages.
+
+  wa_legislature:
+    name: Washington State Legislature
+    publisher: Washington State Legislature
+    url: https://app.leg.wa.gov/
+    description: Official text and history of Washington bills.
+
+  va_legislature:
+    name: Virginia Legislative Information System
+    publisher: Virginia General Assembly
+    url: https://lis.virginia.gov/
+    description: Official text and history of Virginia bills.
+
+  dsire:
+    name: DSIRE
+    publisher: NC Clean Energy Technology Center
+    url: https://www.dsireusa.org/
+    description: Database of State Incentives for Renewables and Efficiency, including state RPS programs.
+
+  lbnl_rps:
+    name: LBNL RPS/CES status reports
+    publisher: Lawrence Berkeley National Laboratory
+    url: https://emp.lbl.gov/projects/renewables-portfolio
+    description: Annual status reports and data on state renewables portfolio standards, including enactment years.
+
+  eia_energy_explained:
+    name: EIA Energy Explained
+    publisher: U.S. Energy Information Administration
+    url: https://www.eia.gov/energyexplained/
+    description: EIA explainers, including the national snapshot of RPS/CES policies.
+
+  ncsl:
+    name: National Conference of State Legislatures
+    publisher: NCSL
+    url: https://www.ncsl.org/energy
+    description: State legislative summaries of energy and climate policy.
+
+  climate_policy_dashboard:
+    name: State Climate Policy Dashboard
+    publisher: Center for Climate and Energy Solutions (C2ES) and partners
+    url: https://www.climatepolicydashboard.org/
+    description: Tracker of enacted state climate policies, with enactment years and bill citations.
+
+  unfccc:
+    name: UNFCCC
+    publisher: United Nations Framework Convention on Climate Change secretariat
+    url: https://unfccc.int/
+    description: Paris Agreement and Kyoto Protocol texts and status.
+
+  un_treaty_collection:
+    name: United Nations Treaty Collection
+    publisher: United Nations (Secretary-General as depositary)
+    url: https://treaties.un.org/
+    description: Depositary notifications recording ratification, acceptance and withdrawal dates.
+
+  elsevier:
+    name: Elsevier journals
+    publisher: Elsevier
+    url: https://www.sciencedirect.com/
+    description: Peer-reviewed articles (Energy Economics, Journal of Environmental Economics and Management, Energy Policy).
+
+  aaas_science:
+    name: Science
+    publisher: American Association for the Advancement of Science
+    url: https://www.science.org/
+    description: Peer-reviewed articles.
+
+  nature_portfolio:
+    name: Nature Portfolio
+    publisher: Springer Nature
+    url: https://www.nature.com/
+    description: Peer-reviewed articles (Nature Energy).
+
+  aea_journals:
+    name: American Economic Association journals
+    publisher: American Economic Association
+    url: https://www.aeaweb.org/journals
+    description: Peer-reviewed articles (Journal of Economic Perspectives, American Economic Journal - Economic Policy).
+
+  oup_journals:
+    name: Oxford University Press journals
+    publisher: Oxford University Press for AERE
+    url: https://academic.oup.com/reep
+    description: Peer-reviewed articles (Review of Environmental Economics and Policy).
+
+  bfi_working_papers:
+    name: Becker Friedman Institute working papers
+    publisher: University of Chicago Becker Friedman Institute for Economics
+    url: https://bfi.uchicago.edu/working-papers/
+    description: Working papers that are not (yet) peer reviewed.

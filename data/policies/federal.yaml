@@ -1,0 +1,546 @@
+# Federal laws, regulations and executive orders.
+#
+# Conventions (see pipeline/policies/load.py for the full format)
+#   * Dates are ISO (YYYY-MM-DD). Reduced precision (YYYY or YYYY-MM) is allowed;
+#     the loader expands start dates to the first day and end dates to the last.
+#   * `applicability` lists when and where a policy's obligations actually applied.
+#     Federal policies use `all_states` (50 states + DC). A policy that was
+#     legally on the books but whose obligations never began to bind (stayed or
+#     vacated before compliance) has `applicability: []` and says so in `summary`.
+#   * Every policy has at least one `citations` entry (documents that establish it)
+#     and every effect has at least one `citations` entry (evidence for the link).
+#   * Evidence tiers: A peer-reviewed quasi-experimental, B this site's own
+#     estimate, C associated / descriptive, D plausible mechanism, no measured effect.
+#
+# Status of every record was checked against sources dated through 2026-10-28.
+
+policies:
+
+  # ── 1970s ──────────────────────────────────────────────────────────────
+  - slug: epca-1975-cafe
+    title: Energy Policy and Conservation Act of 1975 (creates CAFE standards)
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 1975-12-22
+    effective: 1975-12-22
+    status: enacted
+    summary: >
+      Pub. L. 94-163 created the Corporate Average Fuel Economy (CAFE) program.
+      The first passenger-car standard (18.0 mpg) applied to model year 1978 and
+      rose to 27.5 mpg by model year 1985. Obligations are counted from model year
+      1978; later CAFE rules are catalogued separately.
+    url: https://www.govinfo.gov/content/pkg/STATUTE-89/pdf/STATUTE-89-Pg871.pdf
+    citations: [pl_94_163]
+    applicability:
+      - jurisdictions: all_states
+        start: 1978-01-01
+        notes: First model year with a CAFE requirement (MY1978).
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: transportation-sector CO2
+        mechanism: >
+          Fleet-average fuel-economy minimums reduce fuel burned per mile of new
+          vehicles, lowering gasoline use and tailpipe CO2 per vehicle-mile.
+          Offsetting channels (rebound driving, fleet mix shifts toward light
+          trucks) mean the net size is not established here.
+        citations: [pl_94_163, jacobsen_2013]
+
+  - slug: purpa-1978
+    title: Public Utility Regulatory Policies Act of 1978 (PURPA)
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 1978-11-09
+    effective: 1978-11-09
+    status: enacted
+    summary: >
+      Title II of the National Energy Act (Pub. L. 95-617). Requires utilities to
+      buy power from qualifying cogeneration and small renewable facilities at
+      avoided cost, opening the grid to non-utility generators.
+    url: https://www.govinfo.gov/content/pkg/STATUTE-92/pdf/STATUTE-92-Pg3117.pdf
+    citations: [pl_95_617]
+    applicability:
+      - jurisdictions: all_states
+        start: 1978-11-09
+    effects:
+      - metric: co2
+        direction: ambiguous
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Guaranteed offtake supported cogeneration and small renewable plants,
+          which can displace fossil generation, but qualifying facilities also
+          included gas- and coal-fired cogeneration, so the net direction is
+          unsettled.
+        citations: [pl_95_617]
+
+  - slug: clean-air-act-1970
+    title: Clean Air Act Amendments of 1970
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 1970-12-31
+    effective: 1970-12-31
+    status: enacted
+    summary: >
+      Pub. L. 91-604 created the modern Clean Air Act framework: national ambient
+      air quality standards, state implementation plans, new-source performance
+      standards and the EPA's role in enforcing them. It does not set a CO2 limit;
+      it became the legal basis for later greenhouse-gas rules (for example the
+      Clean Power Plan and vehicle GHG standards).
+    url: https://www.epa.gov/laws-regulations/summary-clean-air-act
+    citations: [pl_91_604, epa_caa_summary]
+    applicability:
+      - jurisdictions: all_states
+        start: 1970-12-31
+    effects:
+      - metric: co2
+        direction: ambiguous
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Controls on conventional pollutants (SO2, NOx, particulates) change fuel
+          choice and plant operation. Scrubbers raise a plant's own energy use,
+          while switching to gas and efficiency gains lower CO2; CO2 itself was
+          not regulated.
+        citations: [pl_91_604, epa_caa_summary]
+
+  # ── 1990s–2000s ────────────────────────────────────────────────────────
+  - slug: clean-air-act-amendments-1990
+    title: Clean Air Act Amendments of 1990
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 1990-11-15
+    effective: 1990-11-15
+    status: enacted
+    summary: >
+      Pub. L. 101-549 added the acid rain cap-and-trade program (Title IV), air
+      toxics provisions, stricter ozone and vehicle-emission requirements and the
+      operating-permit program. No CO2 limit; the Acid Rain Program is catalogued
+      separately.
+    url: https://www.govinfo.gov/content/pkg/PLAW-101publ549/pdf/PLAW-101publ549.pdf
+    citations: [pl_101_549, epa_caa_summary]
+    applicability:
+      - jurisdictions: all_states
+        start: 1990-11-15
+    effects:
+      - metric: co2
+        direction: ambiguous
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Tighter criteria-pollutant and fuel standards alter fuel mix and add
+          pollution-control energy use; CO2 was not itself capped.
+        citations: [pl_101_549, epa_caa_summary]
+
+  - slug: acid-rain-program
+    title: Acid Rain Program (Clean Air Act Title IV)
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 1990-11-15
+    effective: 1995-01-01
+    status: enacted
+    summary: >
+      National SO2 cap-and-trade for power plants (and NOx rate limits), with
+      Phase I starting 1995 for the largest, mostly eastern and midwestern units
+      and Phase II from 2000 covering units in the 48 contiguous states and DC.
+      Applicability here starts at Phase II; the Phase I state list is not
+      enumerated. It did not cap CO2 but is the model for later power-sector
+      cap-and-trade programs.
+    url: https://www.epa.gov/acidrain/acid-rain-program
+    citations: [pl_101_549, epa_acid_rain_program]
+    applicability:
+      - jurisdictions: all_states
+        except: [AK, HI]
+        start: 2000-01-01
+        notes: Phase II. Phase I (from 1995-01-01) covered about 110 plants in mainly eastern and midwestern states; those states are not listed.
+    effects:
+      - metric: co2
+        direction: ambiguous
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          The SO2 allowance price pushed plants toward low-sulfur coal and
+          scrubbers rather than lower-carbon fuels. Scrubbers add parasitic load;
+          fuel switching between coal grades has little CO2 effect. The literature
+          studied SO2 outcomes, not CO2.
+        citations: [epa_acid_rain_program, schmalensee_stavins_2013]
+
+  - slug: energy-policy-act-2005
+    title: Energy Policy Act of 2005
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 2005-08-08
+    effective: 2005-08-08
+    status: enacted
+    summary: >
+      Pub. L. 109-58. Extended and expanded tax credits for renewable electricity,
+      created the Renewable Fuel Standard, added efficiency standards and loan
+      guarantees for nuclear and other low-carbon technologies.
+    url: https://www.govinfo.gov/content/pkg/PLAW-109publ58/pdf/PLAW-109publ58.pdf
+    citations: [pl_109_58]
+    applicability:
+      - jurisdictions: all_states
+        start: 2005-08-08
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Production and investment tax credits lower the cost of wind, solar and
+          other low-carbon generation; efficiency standards and the biofuel
+          mandate reduce fossil fuel demand. No national estimate of the CO2
+          effect is recorded here.
+        citations: [pl_109_58]
+
+  - slug: eisa-2007
+    title: Energy Independence and Security Act of 2007
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 2007-12-19
+    effective: 2007-12-19
+    status: enacted
+    summary: >
+      Pub. L. 110-140. Directed a 35 mpg fleet-wide fuel-economy target by 2020,
+      expanded the Renewable Fuel Standard and set lighting and appliance
+      efficiency standards (including the phase-out of common incandescent bulbs).
+    url: https://www.govinfo.gov/content/pkg/PLAW-110publ140/pdf/PLAW-110publ140.pdf
+    citations: [pl_110_140]
+    applicability:
+      - jurisdictions: all_states
+        start: 2007-12-19
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Higher vehicle fuel economy, efficiency standards for lighting and
+          appliances, and biofuel blending lower fossil energy demand.
+        citations: [pl_110_140, jacobsen_2013]
+
+  - slug: arra-2009
+    title: American Recovery and Reinvestment Act of 2009 (energy provisions)
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 2009-02-17
+    effective: 2009-02-17
+    status: expired
+    summary: >
+      Pub. L. 111-5. Its clean-energy package funded renewable-energy grants and
+      loan guarantees, grid modernization, building weatherization, and extended
+      renewable tax credits. New awards and credit eligibility largely ended
+      around 2011-2012; spending continued afterwards. The end date used here is
+      approximate.
+    url: https://www.govinfo.gov/content/pkg/PLAW-111publ5/pdf/PLAW-111publ5.pdf
+    citations: [pl_111_5]
+    applicability:
+      - jurisdictions: all_states
+        start: 2009-02-17
+        end: 2012-12-31
+        notes: Approximate. Wind production tax credit eligibility under ARRA ran to end-2012; Section 1603 grants required construction to begin by end-2011.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Subsidized deployment of renewables, efficiency retrofits and grid
+          upgrades displaces fossil energy. The policy-monitor review of the
+          package documents spending and deployment but reports no measured CO2
+          effect.
+        citations: [pl_111_5, aldy_2013]
+
+  # ── Vehicle standards ──────────────────────────────────────────────────
+  - slug: ld-ghg-cafe-my2012-2016
+    title: Light-duty vehicle GHG and CAFE standards, model years 2012-2016
+    kind: regulation
+    level: federal
+    jurisdiction: US
+    enacted: 2010-04-01
+    effective: 2010-07-06
+    repealed: 2026-04-20
+    status: repealed
+    summary: >
+      First joint EPA/NHTSA rule, setting fleet-average GHG limits (about 250 g
+      CO2/mi) and CAFE standards (about 35.5 mpg) for model year 2016. Applicable
+      model years 2012-2016; successor rules covered later years. EPA's 2026
+      rescission repealed all EPA vehicle GHG standards for model years 2012 and
+      later, effective 2026-04-20 (NHTSA's CAFE regulations are a separate legal
+      instrument).
+    url: https://www.federalregister.gov/d/2010-8159
+    citations: [fr_2010_ld_ghg_cafe, fr_2026_endangerment_rescission]
+    applicability:
+      - jurisdictions: all_states
+        start: 2012-01-01
+        end: 2016-12-31
+        notes: Model years 2012-2016 (model years can be sold from the previous calendar year).
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: transportation-sector CO2
+        mechanism: >
+          Stricter fleet-average tailpipe GHG and fuel-economy limits cut CO2 per
+          vehicle-mile of new cars and light trucks, with the fleet turning over
+          gradually. Rebound driving offsets part of the effect. Modelled, not
+          measured.
+        citations: [fr_2010_ld_ghg_cafe, jacobsen_2013]
+
+  - slug: ld-ghg-cafe-my2017-2025
+    title: Light-duty vehicle GHG and CAFE standards, model years 2017-2025
+    kind: regulation
+    level: federal
+    jurisdiction: US
+    enacted: 2012-08-28
+    effective: 2012-12-14
+    repealed: 2026-04-20
+    status: repealed
+    summary: >
+      Joint EPA/NHTSA rule extending fleet-average GHG and fuel-economy standards
+      through model year 2025 (an EPA target of about 163 g CO2/mi, roughly 54.5
+      mpg-equivalent). Later actions changed the standards for model years 2021
+      and beyond (the 2020 SAFE rule and subsequent resets); those are not
+      catalogued separately, so applicability here ends with model year 2020.
+      EPA's 2026 rescission repealed all EPA vehicle GHG standards, effective
+      2026-04-20.
+    url: https://www.federalregister.gov/d/2012-21972
+    citations: [fr_2012_ld_ghg_cafe, fr_2026_endangerment_rescission]
+    applicability:
+      - jurisdictions: all_states
+        start: 2017-01-01
+        end: 2020-12-31
+        notes: Model years 2017-2020 under the 2012 rule's own standards; later model years were governed by successor rules not catalogued here.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: transportation-sector CO2
+        mechanism: >
+          Continued tightening of fleet-average tailpipe GHG and fuel-economy
+          limits lowers CO2 per vehicle-mile of new vehicles as the fleet turns
+          over. Modelled, not measured.
+        citations: [fr_2012_ld_ghg_cafe, jacobsen_2013]
+
+  # ── Power-sector rules ─────────────────────────────────────────────────
+  - slug: mats-2012
+    title: Mercury and Air Toxics Standards (MATS)
+    kind: regulation
+    level: federal
+    jurisdiction: US
+    enacted: 2011-12-16
+    effective: 2012-04-16
+    status: enacted
+    summary: >
+      EPA standards limiting mercury, acid gases and other toxic emissions from
+      coal- and oil-fired power plants. Compliance was due 2015-04-16 (with
+      one-year extensions granted case by case). It does not regulate CO2.
+      Amendments tightening some limits (2024) were repealed in 2026, restoring
+      the 2012 standards (effective 2026-04-27).
+    url: https://www.federalregister.gov/d/2012-806
+    citations: [fr_2012_mats, fr_2026_mats_repeal]
+    applicability:
+      - jurisdictions: all_states
+        start: 2015-04-16
+        notes: Compliance deadline; the rule took legal effect on 2012-04-16.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Retrofit costs for older coal units accelerated retirements, which were
+          mostly replaced by lower-carbon gas and renewable generation. CO2 is a
+          co-benefit; no measured CO2 effect is recorded here.
+        citations: [fr_2012_mats]
+
+  - slug: clean-power-plan-2015
+    title: Clean Power Plan (CAA section 111(d) guidelines for existing power plants)
+    kind: regulation
+    level: federal
+    jurisdiction: US
+    enacted: 2015-08-03
+    effective: 2015-12-22
+    status: blocked
+    summary: >
+      EPA guidelines requiring state plans to cut power-sector CO2 (about 32%
+      below 2005 by 2030 nationally). The Supreme Court stayed the rule on
+      2016-02-09, before any compliance obligation began (interim compliance was
+      due from 2022), and it was never implemented. EPA repealed it in 2019 (ACE
+      rule); the D.C. Circuit vacated that repeal in 2021, but EPA concluded that
+      neither rule left any obligation in place. Test case for applicability:
+      legally on the books, never binding, so no applicability rows.
+    url: https://www.federalregister.gov/d/2015-22842
+    citations: [fr_2015_cpp, scotus_2016_cpp_stay, dccir_2021_ace_vacatur, epa_2021_ace_cpp_status_memo]
+    applicability: []
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Would have set state emission-rate or mass goals for existing fossil
+          power plants. Because compliance never began, no policy-driven effect
+          is expected; any change in power-sector CO2 over this period reflects
+          other factors such as gas prices and state policy.
+        citations: [fr_2015_cpp, scotus_2016_cpp_stay]
+
+  - slug: ace-rule-2019
+    title: Affordable Clean Energy (ACE) rule
+    kind: regulation
+    level: federal
+    jurisdiction: US
+    enacted: 2019-06-19
+    effective: 2019-09-06
+    repealed: 2021-01-19
+    status: repealed
+    summary: >
+      EPA's replacement for the Clean Power Plan, limited to heat-rate
+      improvements at coal plants. State plans were due 2022-07-08. The D.C.
+      Circuit vacated the rule on 2021-01-19 before any plan was due, so no
+      obligation ever bound. No applicability rows.
+    url: https://www.federalregister.gov/d/2019-13507
+    citations: [fr_2019_ace, dccir_2021_ace_vacatur, epa_2021_ace_cpp_status_memo]
+    applicability: []
+    effects:
+      - metric: co2
+        direction: ambiguous
+        tier: D
+        scope: electric-power-sector CO2
+        mechanism: >
+          Efficiency upgrades at coal units lower CO2 per MWh but can make coal
+          plants cheaper to run and so raise their generation; EPA's own analysis
+          showed small and mixed effects. Never implemented.
+        citations: [fr_2019_ace, dccir_2021_ace_vacatur]
+
+  # ── Recent federal laws ────────────────────────────────────────────────
+  - slug: iija-2021
+    title: Infrastructure Investment and Jobs Act
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 2021-11-15
+    effective: 2021-11-15
+    status: enacted
+    summary: >
+      Pub. L. 117-58. Multi-year funding for transit and passenger rail, electric
+      vehicle charging, grid resilience and transmission, clean hydrogen,
+      carbon management and electric school buses.
+    url: https://www.govinfo.gov/content/pkg/PLAW-117publ58/pdf/PLAW-117publ58.pdf
+    citations: [pl_117_58]
+    applicability:
+      - jurisdictions: all_states
+        start: 2021-11-15
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Funding for transit, EV charging, grid and low-carbon technology
+          deployment can displace fossil fuel use. Too recent for a measured
+          effect.
+        citations: [pl_117_58]
+
+  - slug: inflation-reduction-act-2022
+    title: Inflation Reduction Act of 2022
+    kind: federal_law
+    level: federal
+    jurisdiction: US
+    enacted: 2022-08-16
+    effective: 2022-08-16
+    status: enacted
+    summary: >
+      Pub. L. 117-169. Technology-neutral clean electricity production and
+      investment tax credits, EV and efficiency incentives, methane fees and
+      grant programs. The 2025 reconciliation law (Pub. L. 119-21, 2025-07-04)
+      repealed or curtailed many provisions, including earlier termination of
+      credits for wind and solar projects that begin construction after
+      2026-07-04 and are not placed in service by end-2027.
+    url: https://www.govinfo.gov/content/pkg/PLAW-117publ169/pdf/PLAW-117publ169.pdf
+    citations: [pl_117_169, pl_119_21, crs_in12624_ira_repeal]
+    applicability:
+      - jurisdictions: all_states
+        start: 2022-08-16
+        notes: Still in force but substantially curtailed from 2025-07-04 by Pub. L. 119-21.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: economy-wide energy-related CO2
+        mechanism: >
+          Tax credits and incentives lower the cost of clean electricity, EVs and
+          efficiency. A multi-model comparison projected economy-wide emissions
+          43-48% below 2005 levels by 2035 under the original law; these are
+          model projections of the original law, not measured effects, and
+          predate the 2025 changes.
+        citations: [pl_117_169, bistline_2023, crs_in12624_ira_repeal]
+
+  # ── Executive orders ───────────────────────────────────────────────────
+  - slug: eo-13990
+    title: "Executive Order 13990: Protecting Public Health and the Environment and Restoring Science to Tackle the Climate Crisis"
+    kind: executive_order
+    level: federal
+    jurisdiction: US
+    enacted: 2021-01-20
+    effective: 2021-01-20
+    repealed: 2025-01-20
+    status: repealed
+    summary: >
+      Directed agencies to review and reverse rules from 2017-2021, restored the
+      social cost of greenhouse gases and began the process of re-examining
+      vehicle and power-plant standards. Revoked by Executive Order 14154
+      (2025-01-20).
+    url: https://www.federalregister.gov/d/2021-01765
+    citations: [fr_2021_eo_13990, fr_2025_eo_14154]
+    applicability:
+      - jurisdictions: all_states
+        start: 2021-01-20
+        end: 2025-01-20
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Works only through the agency actions it triggered (for example
+          vehicle and power-plant standards) rather than on emissions directly.
+        citations: [fr_2021_eo_13990]
+
+  - slug: eo-14008
+    title: "Executive Order 14008: Tackling the Climate Crisis at Home and Abroad"
+    kind: executive_order
+    level: federal
+    jurisdiction: US
+    enacted: 2021-01-27
+    effective: 2021-01-27
+    repealed: 2025-01-20
+    status: repealed
+    summary: >
+      Set a government-wide climate policy: a net-zero by 2050 goal, a 100%
+      carbon-pollution-free electricity target by 2035, a federal clean fleet and
+      the Justice40 initiative. Revoked by Executive Order 14154 (2025-01-20).
+    url: https://www.federalregister.gov/d/2021-02177
+    citations: [fr_2021_eo_14008, fr_2025_eo_14154]
+    applicability:
+      - jurisdictions: all_states
+        start: 2021-01-27
+        end: 2025-01-20
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: all-sector energy-related CO2
+        mechanism: >
+          Sets goals and directs agencies; effects depend on follow-on rules,
+          procurement and funding rather than on the order itself.
+        citations: [fr_2021_eo_14008]

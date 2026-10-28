@@ -15,6 +15,7 @@ from pathlib import Path
 
 import schema
 import seed
+from policies import load as policy_load
 from sources import bea_gdp, census_pop, eia_co2
 
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "app.db"
@@ -53,6 +54,9 @@ def main() -> None:
     gdp = bea_gdp.fetch()
     bea_gdp.load(conn, gdp)
 
+    # ── Load the hand-curated policy catalog (data/policies/*.yaml) ────
+    policy_stats = policy_load.load_policies(conn)
+
     # ── Summary ────────────────────────────────────────────────────────
     n_jur = conn.execute("SELECT count(*) FROM jurisdictions").fetchone()[0]
     n_src = conn.execute("SELECT count(*) FROM sources").fetchone()[0]
@@ -78,6 +82,12 @@ def main() -> None:
     print(f"    CO₂:        {co2_obs:,}")
     print(f"    Population: {pop_obs:,}")
     print(f"    GDP:        {gdp_obs:,}")
+    print(
+        f"  {policy_stats['policies']} policies loaded "
+        f"({policy_stats['applicability']:,} applicability rows, "
+        f"{policy_stats['effects']} policy-metric effects, "
+        f"{policy_stats['citations']} citations)"
+    )
 
     conn.close()
 

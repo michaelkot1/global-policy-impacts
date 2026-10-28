@@ -4,6 +4,24 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · policy-catalog
+
+Wrote a hand-curated catalog of 30 policies in `data/policies/*.yaml` (17 federal, 10 state, 1 interstate, 2 international), plus a source registry (`_sources.yaml`, 26 sources) and a citation registry (`_citations.yaml`, ~65 documents with DOIs or official URLs). `pipeline/policies/load.py` validates the whole catalog before writing (all errors reported at once: unknown states, bad dates, overlapping applicability, kind/level mismatches, uncited effects, and evidence-tier rules such as "tier A needs a peer-reviewed citation with a DOI") and then upserts it into SQLite; `build_db.py` now calls it, giving 818 per-state applicability rows. Each policy's CO₂ link carries an evidence tier and at least one citation; only RGGI reaches tier A (−19.4 %, impact score +4, via `pipeline/policies/scoring.py`), and the rest are tier C or D with no numeric estimate.
+
+**Issues**
+
+- `schema.py` gained a nullable `policy_effects.scope` column and a `policy_citations` join table (policy-level sources such as statute text); the plan's data model did not list either.
+- `policy_effects` is UNIQUE(policy_id, metric_id), so the site's own event-study (tier B) row cannot coexist with an A/C/D row from YAML for the same policy and metric. The loader skips the YAML row when a tier-B row exists. Whether to keep both needs a schema decision.
+- Impact scores exist only for effects with a percent estimate, so only RGGI has one so far. Everything else is unscored until the event-study work produces estimates.
+- Evidence tiers are deliberately conservative. California cap-and-trade and state RPS are tier C because attribution is ambiguous or the main paper (Greenstone & Nath) is still a working paper; promote it to tier A once it is published.
+- The Berkeley Lab RPS spreadsheet was blocked, so per-state RPS start years (year precision) come from the 2016 LBNL chart. Binding-standard dates that differ (PA, MN, AZ, NM) are flagged in the row notes. The AZ, TX and KS end dates should be re-checked against a primary source.
+- Section 177 states for California's ZEV and ACC II rules, and the Phase I states for the Acid Rain Program, are not enumerated; those policies are recorded on California or the 49 non-AK/HI states respectively. Successor vehicle rules are not catalogued.
+- Applicability starts follow the date obligations bind (e.g. MATS 2015-04-16, not the 2012 rule date). Policies that never bound (Clean Power Plan, ACE, Kyoto) have no applicability rows. Paris status `repealed` means US participation ended on 2026-01-27. Legal statuses were checked on the web as of 2026-10-28 and may change.
+- Interstate, umbrella and international policies use the US row as the issuing jurisdiction because `policies.jurisdiction_id` is NOT NULL.
+- I could not verify every URL: some congress.gov and leginfo pages return 403 to scripts, so govinfo equivalents are used where available and `accessed` is left blank for pages I did not open.
+
+---
+
 ## 2026-10-28 · ingest-denoms
 
 Implemented `pipeline/sources/census_pop.py` and `pipeline/sources/bea_gdp.py` to ingest Census population (1970–2023) and BEA state GDP (1997–2025). Census population spans six file sources: three modern CSV downloads from Census Bureau (2000–2023), plus three historical files — `st-99-03.txt` for the 1990s, `st8090ts.txt` for the 1980s, and `pe-19.csv` (age × race × sex breakdowns summed to totals) for the 1970s — yielding 2,754 observations (51 jurisdictions × 54 years). BEA GDP uses the Regional API (`SAGDP1`, LineCode 1, all-industry total) with a `BEA_API_KEY` from `.env`, with a CSV-download fallback, yielding 1,479 observations. Updated `seed.py` to register `population` and `gdp` metrics linked to their respective sources, and `build_db.py` to call both new modules. Per-capita and per-GDP CO₂ rankings are now computable by joining on jurisdiction and year.

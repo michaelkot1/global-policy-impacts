@@ -1,0 +1,491 @@
+# Registry of citations referenced by the policy catalog (by key).
+#
+# Fields
+#   title          required
+#   source         required; key in _sources.yaml (the publisher / host)
+#   authors        optional, free text
+#   year           optional
+#   doi            optional; every DOI here was checked against Crossref
+#   url            optional but expected when there is no DOI
+#   peer_reviewed  optional (default false); evidence tier A requires at least one
+#                  peer_reviewed citation with a DOI
+#   accessed       optional ISO date on which the URL was last checked and found to
+#                  resolve (and, for pages used as the basis of a date or number,
+#                  read). Left out where a site blocks automated access and the
+#                  page was not checked.
+
+citations:
+
+  # ── Federal statutes ───────────────────────────────────────────────────
+  pl_91_604:
+    title: "Clean Air Act Amendments of 1970, Pub. L. 91-604, 84 Stat. 1676"
+    year: 1970
+    url: https://www.govinfo.gov/content/pkg/STATUTE-84/pdf/STATUTE-84-Pg1676.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  epa_caa_summary:
+    title: Summary of the Clean Air Act
+    url: https://www.epa.gov/laws-regulations/summary-clean-air-act
+    source: epa
+    accessed: 2026-10-28
+
+  pl_101_549:
+    title: "Clean Air Act Amendments of 1990, Pub. L. 101-549"
+    year: 1990
+    url: https://www.govinfo.gov/content/pkg/PLAW-101publ549/pdf/PLAW-101publ549.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  epa_acid_rain_program:
+    title: Acid Rain Program
+    url: https://www.epa.gov/acidrain/acid-rain-program
+    source: epa
+    accessed: 2026-10-28
+
+  pl_94_163:
+    title: "Energy Policy and Conservation Act, Pub. L. 94-163, 89 Stat. 871"
+    year: 1975
+    url: https://www.govinfo.gov/content/pkg/STATUTE-89/pdf/STATUTE-89-Pg871.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_95_617:
+    title: "Public Utility Regulatory Policies Act of 1978 (title II of the National Energy Act), Pub. L. 95-617, 92 Stat. 3117"
+    year: 1978
+    url: https://www.govinfo.gov/content/pkg/STATUTE-92/pdf/STATUTE-92-Pg3117.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_109_58:
+    title: "Energy Policy Act of 2005, Pub. L. 109-58"
+    year: 2005
+    url: https://www.govinfo.gov/content/pkg/PLAW-109publ58/pdf/PLAW-109publ58.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_110_140:
+    title: "Energy Independence and Security Act of 2007, Pub. L. 110-140"
+    year: 2007
+    url: https://www.govinfo.gov/content/pkg/PLAW-110publ140/pdf/PLAW-110publ140.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_111_5:
+    title: "American Recovery and Reinvestment Act of 2009, Pub. L. 111-5"
+    year: 2009
+    url: https://www.govinfo.gov/content/pkg/PLAW-111publ5/pdf/PLAW-111publ5.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_117_58:
+    title: "Infrastructure Investment and Jobs Act, Pub. L. 117-58"
+    year: 2021
+    url: https://www.govinfo.gov/content/pkg/PLAW-117publ58/pdf/PLAW-117publ58.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_117_169:
+    title: "Inflation Reduction Act of 2022, Pub. L. 117-169"
+    year: 2022
+    url: https://www.govinfo.gov/content/pkg/PLAW-117publ169/pdf/PLAW-117publ169.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  pl_119_21:
+    title: "An Act to provide for reconciliation pursuant to title II of H. Con. Res. 14 (One Big Beautiful Bill Act), Pub. L. 119-21"
+    year: 2025
+    url: https://www.govinfo.gov/content/pkg/PLAW-119publ21/pdf/PLAW-119publ21.pdf
+    source: govinfo
+    accessed: 2026-10-28
+
+  crs_in12624_ira_repeal:
+    title: IRA Tax Credit Repeal in the FY2025 Reconciliation Law (CRS Insight IN12624)
+    authors: Congressional Research Service
+    url: https://www.congress.gov/crs_external_products/IN/PDF/IN12624/IN12624.4.pdf
+    source: congress_gov
+    accessed: 2026-10-28
+
+  hjres88_acc2:
+    title: "H.J.Res.88, 119th Congress: congressional disapproval of EPA's Advanced Clean Cars II waiver (became Pub. L. 119-16 on 2025-06-12)"
+    year: 2025
+    url: https://www.congress.gov/bill/119th-congress/house-joint-resolution/88
+    source: congress_gov
+    accessed: 2026-10-28
+
+  wh_2025_06_12_statement:
+    title: Statement by the President on signing H.J. Res. 87, 88 and 89 (June 12, 2025)
+    year: 2025
+    url: https://www.whitehouse.gov/briefings-statements/2025/06/statement-by-the-president/
+    source: white_house
+    accessed: 2026-10-28
+
+  # ── Federal rules, executive orders, court actions ─────────────────────
+  fr_2010_ld_ghg_cafe:
+    title: Light-Duty Vehicle Greenhouse Gas Emission Standards and Corporate Average Fuel Economy Standards; Final Rule (75 FR 25324)
+    year: 2010
+    url: https://www.federalregister.gov/d/2010-8159
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2012_ld_ghg_cafe:
+    title: 2017 and Later Model Year Light-Duty Vehicle Greenhouse Gas Emissions and Corporate Average Fuel Economy Standards (77 FR 62624)
+    year: 2012
+    url: https://www.federalregister.gov/d/2012-21972
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2026_endangerment_rescission:
+    title: Rescission of the Greenhouse Gas Endangerment Finding and Motor Vehicle Greenhouse Gas Emission Standards Under the Clean Air Act (91 FR 7686)
+    year: 2026
+    url: https://www.federalregister.gov/d/2026-03157
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2012_mats:
+    title: National Emission Standards for Hazardous Air Pollutants From Coal- and Oil-Fired Electric Utility Steam Generating Units and Standards of Performance for Fossil-Fuel-Fired Electric Utility, Industrial-Commercial-Institutional, and Small Industrial-Commercial-Institutional Steam Generating Units (77 FR 9304)
+    year: 2012
+    url: https://www.federalregister.gov/d/2012-806
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2026_mats_repeal:
+    title: "National Emission Standards for Hazardous Air Pollutants: Coal- and Oil-Fired Electric Utility Steam Generating Units: Final Repeal (91 FR 9088)"
+    year: 2026
+    url: https://www.federalregister.gov/d/2026-03638
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2015_cpp:
+    title: "Carbon Pollution Emission Guidelines for Existing Stationary Sources: Electric Utility Generating Units (Clean Power Plan, 80 FR 64662)"
+    year: 2015
+    url: https://www.federalregister.gov/d/2015-22842
+    source: federal_register
+    accessed: 2026-10-28
+
+  scotus_2016_cpp_stay:
+    title: "Chamber of Commerce v. EPA, No. 15A787, order granting stay of the Clean Power Plan (Feb. 9, 2016)"
+    year: 2016
+    url: https://www.supremecourt.gov/orders/courtorders/020916zr3_hf5m.pdf
+    source: us_courts
+    accessed: 2026-10-28
+
+  fr_2019_ace:
+    title: Repeal of the Clean Power Plan; Emission Guidelines for Greenhouse Gas Emissions From Existing Electric Utility Generating Units; Revisions to Emission Guidelines Implementing Regulations (Affordable Clean Energy rule, 84 FR 32520)
+    year: 2019
+    url: https://www.federalregister.gov/d/2019-13507
+    source: federal_register
+    accessed: 2026-10-28
+
+  dccir_2021_ace_vacatur:
+    title: "American Lung Association v. EPA, No. 19-1140 (D.C. Cir. Jan. 19, 2021), vacating the ACE rule and the repeal of the Clean Power Plan"
+    year: 2021
+    url: https://www.epa.gov/system/files/documents/2021-09/ala-v-epa-decision-19-1140-2021-01-19.pdf
+    source: us_courts
+    accessed: 2026-10-28
+
+  epa_2021_ace_cpp_status_memo:
+    title: Memorandum - Status of Affordable Clean Energy Rule and Clean Power Plan (Feb. 11, 2021)
+    year: 2021
+    url: https://www.epa.gov/sites/default/files/2021-02/documents/ace%5Fletter%5F021121.doc%5Fsigned.pdf
+    source: epa
+    accessed: 2026-10-28
+
+  fr_2021_eo_13990:
+    title: "Executive Order 13990: Protecting Public Health and the Environment and Restoring Science To Tackle the Climate Crisis (86 FR 7037)"
+    year: 2021
+    url: https://www.federalregister.gov/d/2021-01765
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2021_eo_14008:
+    title: "Executive Order 14008: Tackling the Climate Crisis at Home and Abroad (86 FR 7619)"
+    year: 2021
+    url: https://www.federalregister.gov/d/2021-02177
+    source: federal_register
+    accessed: 2026-10-28
+
+  fr_2025_eo_14154:
+    title: "Executive Order 14154: Unleashing American Energy (90 FR 8353); section 4(a) revokes EO 13990 and EO 14008"
+    year: 2025
+    url: https://www.federalregister.gov/d/2025-01956
+    source: federal_register
+    accessed: 2026-10-28
+
+  # ── Interstate: RGGI ───────────────────────────────────────────────────
+  rggi_design_archive:
+    title: Program Design Archive (RGGI, Inc.)
+    url: https://www.rggi.org/program-overview-and-design/design-archive
+    source: rggi
+    accessed: 2026-10-28
+
+  rggi_new_participation:
+    title: Materials on New Participation (RGGI, Inc.) - Virginia and Pennsylvania participation history
+    url: https://www.rggi.org/program-overview-and-design/new-participation
+    source: rggi
+    accessed: 2026-10-28
+
+  rggi_nj_participation:
+    title: New Jersey Participation (RGGI, Inc.)
+    url: https://www.rggi.org/program-overview-and-design/design-archive/nj-participation
+    source: rggi
+    accessed: 2026-10-28
+
+  crs_r41836_rggi:
+    title: "The Regional Greenhouse Gas Initiative: Background, Impacts, and Selected Issues (CRS R41836)"
+    authors: Congressional Research Service
+    url: https://www.congress.gov/crs-product/R41836
+    source: congress_gov
+    accessed: 2026-10-28
+
+  # ── State policies ─────────────────────────────────────────────────────
+  carb_ab32_fact_sheet:
+    title: AB 32 Global Warming Solutions Act of 2006 (CARB fact sheet)
+    url: https://ww2.arb.ca.gov/resources/fact-sheets/ab-32-global-warming-solutions-act-2006
+    source: carb
+    accessed: 2026-10-28
+
+  carb_ghg_inventory:
+    title: California Greenhouse Gas Emission Inventory (CARB)
+    url: https://ww2.arb.ca.gov/ghg-inventory-data
+    source: carb
+    accessed: 2026-10-28
+
+  carb_cap_and_trade:
+    title: Cap-and-Trade Program (CARB)
+    url: https://ww2.arb.ca.gov/our-work/programs/cap-and-trade-program
+    source: carb
+    accessed: 2026-10-28
+
+  ca_ab1207_text:
+    title: AB 1207 (2025), Climate change - market-based compliance mechanism - extension (approved Sept. 19, 2025)
+    year: 2025
+    url: https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB1207
+    source: ca_legislature
+    accessed: 2026-10-28
+
+  ca_sb100_text:
+    title: SB 100 (2018), California Renewables Portfolio Standard Program - emissions of greenhouse gases
+    year: 2018
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201720180SB100
+    source: ca_legislature
+
+  carb_zev_program:
+    title: Zero-Emission Vehicle Program (CARB)
+    url: https://ww2.arb.ca.gov/our-work/programs/zero-emission-vehicle-program/about
+    source: carb
+    accessed: 2026-10-28
+
+  carb_advanced_clean_cars:
+    title: Advanced Clean Cars (CARB)
+    url: http://ww2.arb.ca.gov/our-work/programs/drive-forward-light-duty-vehicle-program/advanced-clean-cars
+    source: carb
+    accessed: 2026-10-28
+
+  ny_clcpa_text:
+    title: "S6599 (2019), New York Climate Leadership and Community Protection Act"
+    year: 2019
+    url: https://legislation.nysenate.gov/pdf/bills/2019/S6599
+    source: ny_legislature
+    accessed: 2026-10-28
+
+  wa_cca_program:
+    title: Climate Commitment Act (Washington Department of Ecology)
+    url: https://ecology.wa.gov/air-climate/climate-commitment-act
+    source: wa_ecology
+    accessed: 2026-10-28
+
+  wa_sb5126:
+    title: "SB 5126 (2021), Concerning the creation of the Washington climate commitment act"
+    year: 2021
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5126&Year=2021
+    source: wa_legislature
+    accessed: 2026-10-28
+
+  wa_sb5116:
+    title: "SB 5116 (2019), Clean Energy Transformation Act"
+    year: 2019
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5116&Year=2019
+    source: wa_legislature
+    accessed: 2026-10-28
+
+  va_hb1526:
+    title: "HB 1526 (2020), Virginia Clean Economy Act"
+    year: 2020
+    url: https://lis.virginia.gov/bill-details/20201/HB1526
+    source: va_legislature
+    accessed: 2026-10-28
+
+  # ── State renewable portfolio standards ────────────────────────────────
+  barbose_2016_rps_chart:
+    title: U.S. Renewables Portfolio Standards - "Year of RPS Enactment" chart (Berkeley Lab, current as of November 2016)
+    authors: Galen Barbose
+    year: 2016
+    url: https://www.cesa.org/wp-content/uploads/Galen-Barbose.pdf
+    source: lbnl_rps
+    accessed: 2026-10-28
+
+  barbose_2025_resource_standards:
+    title: "U.S. State Electricity Resource Standards: 2025 Data Update"
+    authors: Galen Barbose
+    year: 2025
+    url: https://eta-publications.lbl.gov/sites/default/files/2025-08/state_electricity_resource_standards-2025_data_update.pdf
+    source: lbnl_rps
+    accessed: 2026-10-28
+
+  eia_rps_snapshot:
+    title: Renewable energy explained - renewable portfolio and clean energy standards
+    url: https://www.eia.gov/energyexplained/renewable-sources/portfolio-standards.php
+    source: eia_energy_explained
+    accessed: 2026-10-28
+
+  ncsl_rps:
+    title: State Renewable Portfolio Standards and Goals
+    url: https://www.ncsl.org/energy/state-renewable-portfolio-standards-and-goals
+    source: ncsl
+    accessed: 2026-10-28
+
+  dsire_rps:
+    title: DSIRE - Database of State Incentives for Renewables and Efficiency
+    url: https://www.dsireusa.org/
+    source: dsire
+    accessed: 2026-10-28
+
+  climate_policy_dashboard_ces:
+    title: Clean Energy and Renewable Portfolio Standards (State Climate Policy Dashboard)
+    url: https://www.climatepolicydashboard.org/policies/electricity/clean-energy-standard
+    source: climate_policy_dashboard
+    accessed: 2026-10-28
+
+  # ── International ──────────────────────────────────────────────────────
+  unfccc_paris:
+    title: The Paris Agreement (UNFCCC)
+    url: https://unfccc.int/process-and-meetings/the-paris-agreement
+    source: unfccc
+    accessed: 2026-10-28
+
+  un_cn71_2025_us_withdrawal:
+    title: "Depositary Notification C.N.71.2025.TREATIES-XXVII.7.d: Paris Agreement, United States of America: Withdrawal (withdrawal takes effect 27 January 2026)"
+    year: 2025
+    url: https://treaties.un.org/doc/Publication/CN/2025/CN.71.2025-Eng.pdf
+    source: un_treaty_collection
+    accessed: 2026-10-28
+
+  crs_r48504_paris_withdrawal:
+    title: "U.S. Withdrawal from the Paris Agreement: Process and Potential Effects (CRS R48504)"
+    authors: Congressional Research Service
+    year: 2025
+    url: https://www.congress.gov/crs-product/R48504
+    source: congress_gov
+    accessed: 2026-10-28
+
+  unfccc_kyoto:
+    title: What is the Kyoto Protocol? (UNFCCC)
+    url: https://unfccc.int/kyoto_protocol
+    source: unfccc
+    accessed: 2026-10-28
+
+  # ── Peer-reviewed and other effect evidence ────────────────────────────
+  murray_maniloff_2015:
+    title: "Why have greenhouse emissions in RGGI states declined? An econometric attribution to economic, energy market, and policy factors"
+    authors: Brian C. Murray, Peter T. Maniloff
+    year: 2015
+    doi: 10.1016/j.eneco.2015.07.013
+    url: https://doi.org/10.1016/j.eneco.2015.07.013
+    source: elsevier
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  yan_2021:
+    title: "The impact of climate policy on fossil fuel consumption: Evidence from the Regional Greenhouse Gas Initiative (RGGI)"
+    authors: Jinhua Yan
+    year: 2021
+    doi: 10.1016/j.eneco.2021.105333
+    url: https://doi.org/10.1016/j.eneco.2021.105333
+    source: elsevier
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  fell_maniloff_2018:
+    title: "Leakage in regional environmental policy: The case of the regional greenhouse gas initiative"
+    authors: Harrison Fell, Peter T. Maniloff
+    year: 2018
+    doi: 10.1016/j.jeem.2017.10.007
+    url: https://doi.org/10.1016/j.jeem.2017.10.007
+    source: elsevier
+    peer_reviewed: true
+
+  chan_morrow_2019:
+    title: "Unintended consequences of cap-and-trade? Evidence from the Regional Greenhouse Gas Initiative"
+    authors: Nathan Chan, Jason Morrow
+    year: 2019
+    doi: 10.1016/j.eneco.2019.01.007
+    url: https://doi.org/10.1016/j.eneco.2019.01.007
+    source: elsevier
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  lessmann_kramer_2024:
+    title: "The effect of cap-and-trade on sectoral emissions: Evidence from California"
+    authors: Kai Lessmann, Nicolas Kramer
+    year: 2024
+    doi: 10.1016/j.enpol.2024.114066
+    url: https://doi.org/10.1016/j.enpol.2024.114066
+    source: elsevier
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  greenstone_nath_2024:
+    title: Do Renewable Portfolio Standards Deliver Cost-Effective Carbon Abatement? (BFI Working Paper 2019-62, updated July 2024; not yet peer reviewed)
+    authors: Michael Greenstone, Ishan Nath
+    year: 2024
+    url: https://bfi.uchicago.edu/working-paper/do-renewable-portfolio-standards-deliver-cost-effective-carbon-abatement/
+    source: bfi_working_papers
+    peer_reviewed: false
+    accessed: 2026-10-28
+
+  carley_2018:
+    title: Empirical evaluation of the stringency and design of renewable portfolio standards
+    authors: Sanya Carley, Lincoln L. Davies, David B. Spence, Nikolaos Zirogiannis
+    year: 2018
+    doi: 10.1038/s41560-018-0202-4
+    url: https://doi.org/10.1038/s41560-018-0202-4
+    source: nature_portfolio
+    peer_reviewed: true
+
+  bistline_2023:
+    title: Emissions and energy impacts of the Inflation Reduction Act
+    authors: John Bistline, Geoffrey Blanford, Maxwell Brown, Dallas Burtraw, Maya Domeshek, Jamil Farbes, et al.
+    year: 2023
+    doi: 10.1126/science.adg3781
+    url: https://doi.org/10.1126/science.adg3781
+    source: aaas_science
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  aldy_2013:
+    title: A Preliminary Assessment of the American Recovery and Reinvestment Act's Clean Energy Package
+    authors: Joseph E. Aldy
+    year: 2013
+    doi: 10.1093/reep/res014
+    url: https://doi.org/10.1093/reep/res014
+    source: oup_journals
+    peer_reviewed: true
+
+  jacobsen_2013:
+    title: Evaluating US Fuel Economy Standards in a Model with Producer and Household Heterogeneity
+    authors: Mark R. Jacobsen
+    year: 2013
+    doi: 10.1257/pol.5.2.148
+    url: https://doi.org/10.1257/pol.5.2.148
+    source: aea_journals
+    peer_reviewed: true
+
+  schmalensee_stavins_2013:
+    title: "The SO2 Allowance-Trading System: The Ironic History of a Grand Policy Experiment"
+    authors: Richard Schmalensee, Robert N. Stavins
+    year: 2013
+    doi: 10.1257/jep.27.1.103
+    url: https://doi.org/10.1257/jep.27.1.103
+    source: aea_journals
+    peer_reviewed: true

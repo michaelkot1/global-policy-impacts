@@ -1,0 +1,76 @@
+# International agreements, shown as context. See federal.yaml for conventions.
+#
+# `jurisdiction: US` is the party whose participation is recorded; `status`
+# describes the United States' position, not the agreement's global status.
+# Applicability is recorded on the United States (country) row rather than on
+# each state.
+
+policies:
+
+  - slug: paris-agreement
+    title: Paris Agreement (United States participation)
+    kind: international_agreement
+    level: international
+    jurisdiction: US
+    enacted: 2015-12-12
+    effective: 2016-11-04
+    repealed: 2026-01-27
+    status: repealed
+    summary: >
+      The UNFCCC treaty to hold warming well below 2 degrees C, under which
+      parties submit nationally determined contributions. The agreement entered
+      into force on 2016-11-04. The US joined in 2016; the first withdrawal took
+      effect 2020-11-04; the US rejoined effective 2021-02-19; a second
+      withdrawal, notified 2025-01-27 under Executive Order 14162, took effect
+      2026-01-27. `status: repealed` here means US participation has ended; the
+      agreement remains in force for other parties. The US commitments are
+      voluntary targets without binding domestic emission limits.
+    url: https://unfccc.int/process-and-meetings/the-paris-agreement
+    citations: [unfccc_paris, un_cn71_2025_us_withdrawal, crs_r48504_paris_withdrawal]
+    applicability:
+      - jurisdictions: [US]
+        start: 2016-11-04
+        end: 2020-11-04
+        notes: First period of US participation; withdrawal notified 2019-11-04 and effective 2020-11-04.
+      - jurisdictions: [US]
+        start: 2021-02-19
+        end: 2026-01-27
+        notes: US acceptance deposited 2021-01-20, effective 2021-02-19; second withdrawal effective 2026-01-27.
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: national economy-wide CO2
+        mechanism: >
+          Works through national targets and later domestic policy rather than
+          binding limits. Effects on US emissions are indirect and not measured
+          here; shown as context for the timeline.
+        citations: [unfccc_paris, crs_r48504_paris_withdrawal]
+
+  - slug: kyoto-protocol
+    title: Kyoto Protocol (United States signed, never ratified)
+    kind: international_agreement
+    level: international
+    jurisdiction: US
+    enacted: 1997-12-11
+    effective: 2005-02-16
+    status: expired
+    summary: >
+      Binding emission targets for developed countries in commitment periods
+      2008-2012 and 2013-2020. The protocol was adopted on 1997-12-11 and entered
+      into force on 2005-02-16. The United States signed it on 1998-11-12 but
+      never ratified it, so it never bound the US and there are no applicability
+      rows. Shown for context only.
+    url: https://unfccc.int/kyoto_protocol
+    citations: [unfccc_kyoto]
+    applicability: []
+    effects:
+      - metric: co2
+        direction: decrease
+        tier: D
+        scope: national economy-wide CO2
+        mechanism: >
+          Binding targets would have limited emissions of party countries. The
+          United States never ratified, so no effect on US emissions is
+          expected.
+        citations: [unfccc_kyoto]
