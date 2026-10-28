@@ -50,7 +50,7 @@ _XLS_BASE = "https://www.eia.gov/environment/emissions/state/excel"
 _SECTOR_MAP: dict[str, str] = {
     "TT": "total",
     "CC": "commercial",
-    "II": "industrial",
+    "IC": "industrial",
     "RC": "residential",
     "TC": "transportation",
     "EC": "electric_power",
@@ -268,7 +268,7 @@ def _fetch_via_api(api_key: str) -> pd.DataFrame:
             resp = body.get("response", {})
 
             if total is None:
-                total = resp.get("total", 0)
+                total = int(resp.get("total", 0))  # API returns it as a string
                 logger.info("  API reports %s total records", f"{total:,}")
 
             page = resp.get("data", [])

@@ -23,7 +23,8 @@ Implemented `pipeline/sources/eia_co2.py` with three public functions — `fetch
 
 **Issues**
 
-- Without an `EIA_API_KEY` in `.env`, only the spreadsheet fallback runs. The API provides full sector and fuel breakdowns for all years, whereas the spreadsheets only carry sector/fuel detail for the latest year (2022). Setting up a free API key is recommended for complete data.
+- Without an `EIA_API_KEY` in `.env`, only the spreadsheet fallback runs, and the spreadsheets only carry sector/fuel detail for the latest year (2022). **Follow-up fix:** with the key set, the API path first silently fell back because `total` comes back from EIA as a string (formatting crashed), and industrial rows were dropped because EIA's code is `IC`, not `II`. Both are fixed; the API path now loads 24,804 rows (total, 5 sectors and 3 fuels for all 52 jurisdictions, 1970–2022), and sector sums match the total.
+- Real keys were placed in the git-tracked `.env.example`; they should live only in the git-ignored `.env`.
 - EIA spreadsheet Tables 4–6 turned out to be different metrics (per-capita, energy intensity, carbon intensity) rather than sector-specific CO₂ emissions; the initial table-to-sector mapping was wrong and had to be corrected. Tables 4–6 are now intentionally skipped.
 - The spreadsheet "Total of states" row label was not in the initial name-to-abbreviation map; it was added to recognise the US total for validation.
 
