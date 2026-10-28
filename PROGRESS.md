@@ -13,7 +13,7 @@ Implemented `pipeline/sources/census_pop.py` and `pipeline/sources/bea_gdp.py` t
 - The Census Bureau API now requires an API key for all endpoints (including decennial data), so the original approach of fetching 1970–2000 anchor points from `api.census.gov` failed with HTTP 302 redirects to `missing_key.html`. Replaced with direct downloads of archived Census text/CSV files.
 - The 2000–2009 intercensal CSV (`st-est00int-alldata.csv`) has demographic breakdowns (SEX, ORIGIN, RACE, AGEGRP) instead of a SUMLEV column. Without filtering to the total rows (all-zero demographic codes), it produced 610K rows instead of 510. Fixed by adding demographic-column filtering.
 - Both BEA fallback CSV URLs return HTML pages instead of actual data, so the BEA module requires a valid `BEA_API_KEY` in `.env` (free registration at https://apps.bea.gov/api/signup/).
-- The EIA API v2 currently fails with a pandas parsing error (`Cannot specify ',' with 's'.`), a pre-existing issue from the ingest-co2 to-do; CO₂ data continues to load via the spreadsheet fallback.
+- The EIA API v2 path in `eia_co2.py` fails with `Cannot specify ',' with 's'.` even with a valid key. This looks like a string-formatting bug (the API returns `total` as a string, and the code formats it with `:,`), but I haven't confirmed or fixed it. It predates this to-do, and CO₂ data still loads via the spreadsheet fallback, so sector and fuel detail is limited to 2022.
 
 ---
 
