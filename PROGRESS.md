@@ -4,6 +4,19 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · ingest-denoms
+
+Implemented `pipeline/sources/census_pop.py` and `pipeline/sources/bea_gdp.py` to ingest Census population (1970–2023) and BEA state GDP (1997–2025). Census population spans six file sources: three modern CSV downloads from Census Bureau (2000–2023), plus three historical files — `st-99-03.txt` for the 1990s, `st8090ts.txt` for the 1980s, and `pe-19.csv` (age × race × sex breakdowns summed to totals) for the 1970s — yielding 2,754 observations (51 jurisdictions × 54 years). BEA GDP uses the Regional API (`SAGDP1`, LineCode 1, all-industry total) with a `BEA_API_KEY` from `.env`, with a CSV-download fallback, yielding 1,479 observations. Updated `seed.py` to register `population` and `gdp` metrics linked to their respective sources, and `build_db.py` to call both new modules. Per-capita and per-GDP CO₂ rankings are now computable by joining on jurisdiction and year.
+
+**Issues**
+
+- The Census Bureau API now requires an API key for all endpoints (including decennial data), so the original approach of fetching 1970–2000 anchor points from `api.census.gov` failed with HTTP 302 redirects to `missing_key.html`. Replaced with direct downloads of archived Census text/CSV files.
+- The 2000–2009 intercensal CSV (`st-est00int-alldata.csv`) has demographic breakdowns (SEX, ORIGIN, RACE, AGEGRP) instead of a SUMLEV column. Without filtering to the total rows (all-zero demographic codes), it produced 610K rows instead of 510. Fixed by adding demographic-column filtering.
+- Both BEA fallback CSV URLs return HTML pages instead of actual data, so the BEA module requires a valid `BEA_API_KEY` in `.env` (free registration at https://apps.bea.gov/api/signup/).
+- The EIA API v2 currently fails with a pandas parsing error (`Cannot specify ',' with 's'.`), a pre-existing issue from the ingest-co2 to-do; CO₂ data continues to load via the spreadsheet fallback.
+
+---
+
 ## 2026-10-28 · ingest-co2
 
 Implemented `pipeline/sources/eia_co2.py` with three public functions — `fetch()`, `validate()`, `load()` — that ingest EIA state CO₂ emissions data. The primary path uses the EIA API v2 (`co2-emissions/co2-emissions-aggregates`) with paginated fetches and saves raw JSON to `data/raw/`; the fallback downloads six Excel spreadsheets from the EIA website (Table 1 for the full 1970–2022 time series of totals, Tables 2–3 for single-year sector and fuel breakdowns). Validation confirms the sum of state totals matches the US total within 1 % for every year; the pipeline loads 3,172 observations (52 jurisdictions × 53 years for totals, plus 2022 sector/fuel breakdowns) into the database via `build_db.py`.

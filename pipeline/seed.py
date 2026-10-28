@@ -122,7 +122,9 @@ def seed_sources(conn: sqlite3.Connection) -> dict[str, int]:
 
 
 def seed_metrics(conn: sqlite3.Connection, source_ids: dict[str, int]) -> None:
-    """Insert the v1 CO2 metric and link it to the EIA source."""
+    """Insert the v1 metrics (CO2, population, GDP) and link them to sources."""
+
+    # ── CO2 ─────────────────────────────────────────────────────────────
     cur = conn.execute(
         "INSERT OR IGNORE INTO metrics "
         "(slug, name, unit, definition, methodology, "
@@ -152,6 +154,63 @@ def seed_metrics(conn: sqlite3.Connection, source_ids: dict[str, int]) -> None:
     conn.execute(
         "INSERT OR IGNORE INTO metric_sources (metric_id, source_id) VALUES (?, ?)",
         (metric_id, eia_source_id),
+    )
+
+    # ── Population (denominator for per-capita normalisation) ───────────
+    cur = conn.execute(
+        "INSERT OR IGNORE INTO metrics "
+        "(slug, name, unit, definition, methodology, "
+        " higher_is_better, allow_total, allow_per_capita, allow_per_gdp) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (
+            "population",
+            "Population",
+            "persons",
+            "Annual resident population estimate by state.",
+            "Census Bureau intercensal and annual estimates, 1970–present. "
+            "Pre-2000 annual values are linearly interpolated between "
+            "decennial census counts.",
+            0,  # neutral
+            1,  # allow_total
+            0,  # per-capita of population is meaningless
+            0,  # per-GDP of population is meaningless
+        ),
+    )
+    pop_id = cur.lastrowid or conn.execute(
+        "SELECT id FROM metrics WHERE slug = 'population'"
+    ).fetchone()[0]
+
+    conn.execute(
+        "INSERT OR IGNORE INTO metric_sources (metric_id, source_id) VALUES (?, ?)",
+        (pop_id, source_ids["Census Population Estimates"]),
+    )
+
+    # ── GDP (denominator for per-GDP normalisation) ─────────────────────
+    cur = conn.execute(
+        "INSERT OR IGNORE INTO metrics "
+        "(slug, name, unit, definition, methodology, "
+        " higher_is_better, allow_total, allow_per_capita, allow_per_gdp) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (
+            "gdp",
+            "Gross Domestic Product",
+            "millions of current dollars",
+            "Annual gross domestic product by state, all-industry total.",
+            "Sourced from BEA SAGDP1 tables (1997 onward). "
+            "Values are in nominal (current) dollars.",
+            0,  # neutral
+            1,  # allow_total
+            1,  # GDP per capita is meaningful
+            0,  # per-GDP of GDP is meaningless
+        ),
+    )
+    gdp_id = cur.lastrowid or conn.execute(
+        "SELECT id FROM metrics WHERE slug = 'gdp'"
+    ).fetchone()[0]
+
+    conn.execute(
+        "INSERT OR IGNORE INTO metric_sources (metric_id, source_id) VALUES (?, ?)",
+        (gdp_id, source_ids["BEA State GDP"]),
     )
 
 

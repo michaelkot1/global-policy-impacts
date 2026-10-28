@@ -15,7 +15,7 @@ from pathlib import Path
 
 import schema
 import seed
-from sources import eia_co2
+from sources import bea_gdp, census_pop, eia_co2
 
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "app.db"
 
@@ -43,16 +43,41 @@ def main() -> None:
     # ── Ingest EIA CO₂ data ────────────────────────────────────────────
     co2 = eia_co2.fetch()
     eia_co2.validate(co2)
-    n_obs = eia_co2.load(conn, co2)
+    eia_co2.load(conn, co2)
+
+    # ── Ingest Census population ───────────────────────────────────────
+    pop = census_pop.fetch()
+    census_pop.load(conn, pop)
+
+    # ── Ingest BEA GDP ─────────────────────────────────────────────────
+    gdp = bea_gdp.fetch()
+    bea_gdp.load(conn, gdp)
 
     # ── Summary ────────────────────────────────────────────────────────
     n_jur = conn.execute("SELECT count(*) FROM jurisdictions").fetchone()[0]
     n_src = conn.execute("SELECT count(*) FROM sources").fetchone()[0]
     n_met = conn.execute("SELECT count(*) FROM metrics").fetchone()[0]
     n_obs = conn.execute("SELECT count(*) FROM observations").fetchone()[0]
+
+    pop_obs = conn.execute(
+        "SELECT count(*) FROM observations o "
+        "JOIN metrics m ON o.metric_id = m.id WHERE m.slug = 'population'"
+    ).fetchone()[0]
+    gdp_obs = conn.execute(
+        "SELECT count(*) FROM observations o "
+        "JOIN metrics m ON o.metric_id = m.id WHERE m.slug = 'gdp'"
+    ).fetchone()[0]
+    co2_obs = conn.execute(
+        "SELECT count(*) FROM observations o "
+        "JOIN metrics m ON o.metric_id = m.id WHERE m.slug = 'co2'"
+    ).fetchone()[0]
+
     print(f"✓ Built {DB_PATH}")
     print(f"  {n_jur} jurisdictions, {n_src} sources, {n_met} metrics seeded")
-    print(f"  {n_obs:,} CO₂ observations loaded")
+    print(f"  {n_obs:,} total observations loaded:")
+    print(f"    CO₂:        {co2_obs:,}")
+    print(f"    Population: {pop_obs:,}")
+    print(f"    GDP:        {gdp_obs:,}")
 
     conn.close()
 
