@@ -9,13 +9,21 @@ Steps:
   6. Write everything to data/app.db.
 """
 
+import logging
 import sqlite3
 from pathlib import Path
 
 import schema
 import seed
+from sources import eia_co2
 
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "app.db"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 def init_db() -> sqlite3.Connection:
@@ -32,11 +40,19 @@ def init_db() -> sqlite3.Connection:
 def main() -> None:
     conn = init_db()
 
+    # ── Ingest EIA CO₂ data ────────────────────────────────────────────
+    co2 = eia_co2.fetch()
+    eia_co2.validate(co2)
+    n_obs = eia_co2.load(conn, co2)
+
+    # ── Summary ────────────────────────────────────────────────────────
     n_jur = conn.execute("SELECT count(*) FROM jurisdictions").fetchone()[0]
     n_src = conn.execute("SELECT count(*) FROM sources").fetchone()[0]
     n_met = conn.execute("SELECT count(*) FROM metrics").fetchone()[0]
+    n_obs = conn.execute("SELECT count(*) FROM observations").fetchone()[0]
     print(f"✓ Built {DB_PATH}")
     print(f"  {n_jur} jurisdictions, {n_src} sources, {n_met} metrics seeded")
+    print(f"  {n_obs:,} CO₂ observations loaded")
 
     conn.close()
 
