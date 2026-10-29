@@ -4,6 +4,25 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · web-policies
+
+Built `/policies` (a filterable catalog of all 31 policies: search, level, status, evidence tier, a "quantified only" box and five sorts, kept in the URL), `/policies/[slug]` (all 31 prerendered) and `/methodology`. A policy page shows its evidence rows, the event-study chart and robustness checks behind each tier-B row, a timeline of which states it covered and when, and its citations; the methodology page defines the metrics, normalizations, tiers, impact score, confidence and this site's own estimator, with counts read live from `app.db`. State pages now link each policy title to its `/policies/[slug]` page, and the shared effect and tier components moved to `src/components/evidence.tsx` and `src/lib/effects-data.ts` so both page types show the same rows. `tsc`, `eslint` and `next build` pass, and I checked the catalog filters and sorts, RGGI, the state RPS record, the Acid Rain Program and the methodology page in a browser.
+
+**Issues**
+
+- The RPS record's `summary` in the YAML contains authoring notes ("`jurisdiction: US` stands for 'many states'...", "these end dates should be checked against the latest Berkeley Lab data"). They show verbatim on the catalog (clamped to three lines) and the policy page. I did not edit the catalog; that text should move to `notes` or be rewritten as a reader-facing summary. The RGGI summary similarly mentions "no applicability rows" for Pennsylvania.
+- Several applicability notes say things like "participation continuous through 2026-10-28" (the date the pipeline ran). They display as written, under "Notes on the dates".
+- Catalog coverage is "N states over time": states that joined, left or returned count once, so RGGI reads "11 states over time" though nine were members throughout. The catalog sorts and filters on the first row only for "Largest estimated effect" (the published row when there is one) but the tier filter matches any row, so RGGI appears under both A and B. Both are stated on the page.
+- "Largest estimated effect" puts policies with no quantified estimate last, and the page says "not estimated" is not "no effect". The only tier D policy with a number is the IRA (a modelled projection); it sorts beside tier A and C rows by size, so use "Strongest evidence" to rank by tier first.
+- The methodology page says "the pre-trend test rejects for 3 of the 4 estimates" and similar counts from `app.db`, but the rest of its text (the score bins, the confidence rubric and rule, the tier A rule) is copied by hand from `pipeline/policies/scoring.py`, the loader and `event_study.py`. If those change, the page text has to be changed too. The Borusyak, Jaravel and Spiess link on the methodology page uses the DOI stored in the catalog's citation record (10.1093/restud/rdae007).
+- Federal laws apply to every state in the same window, so no tier A or B can come from this site for them. The policy page says so, in cautious wording because the Acid Rain Program covers 49 jurisdictions, not 51.
+- Unknown slugs such as `/policies/narnia` render the not-found page but return HTTP 200, for the same Cache Components reason as the state pages.
+- The "Research and data behind the effect estimates" list on a tier-B policy includes the EIA, Census, BEA and Borusyak et al. citations the estimator row carries, so it mixes data sources with research.
+- No site navigation exists yet; the three new pages link to each other, to the state pages and to `/metrics/co2`, and the policy pages are reachable from the state pages. There are no automated tests.
+- I did not touch the uncommitted `.env.example` change or the untracked `data/app.db-shm` and `-wal` files.
+
+---
+
 ## 2026-10-28 · web-state
 
 Built `/states/[state]` (slugs like `california`, `district-of-columbia`; all 51 are prerendered). Each page has three headline figures (total, per capita, per GDP, with rank and change since 1990 and 2005), a stacked sector chart with a Total / Per capita / Per GDP toggle, dashed markers for the year each policy starts to apply (numbered to match the list), a rank-history chart, and a filterable list of the policies that applied to the state with their dates, status, evidence tier, impact score, confidence and citations. The ranking table and the state panel on `/metrics/co2` now link to the state pages. `tsc`, `eslint` and `next build` pass, and I checked New Jersey, California and DC in a browser (toggle, per-GDP gap before 1997, hover highlight of a policy's span).
