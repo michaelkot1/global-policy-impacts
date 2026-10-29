@@ -167,9 +167,12 @@ def seed_metrics(conn: sqlite3.Connection, source_ids: dict[str, int]) -> None:
             "Population",
             "persons",
             "Annual resident population estimate by state.",
-            "Census Bureau intercensal and annual estimates, 1970–present. "
-            "Pre-2000 annual values are linearly interpolated between "
-            "decennial census counts.",
+            "Census Bureau state population estimates (July 1), 1970–present: "
+            "1970–79 from the state estimates by age, sex and race (summed); "
+            "1980–89 from the 1980s state estimates; 1990–99 from the 1990–2000 "
+            "intercensal estimates (county files summed to states), revised after "
+            "the 2000 census; 2000–09 from the 2000–2010 intercensal estimates; "
+            "2010 onward from the annual vintage files. Nothing is interpolated.",
             0,  # neutral
             1,  # allow_total
             0,  # per-capita of population is meaningless

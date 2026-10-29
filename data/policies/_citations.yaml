@@ -257,6 +257,12 @@ citations:
     source: carb
     accessed: 2026-10-28
 
+  carb_lcfs_about:
+    title: Low Carbon Fuel Standard - About (CARB)
+    url: https://ww2.arb.ca.gov/our-work/programs/low-carbon-fuel-standard/about
+    source: carb
+    accessed: 2026-10-28
+
   ca_ab1207_text:
     title: AB 1207 (2025), Climate change - market-based compliance mechanism - extension (approved Sept. 19, 2025)
     year: 2025
@@ -435,13 +441,63 @@ citations:
     peer_reviewed: true
     accessed: 2026-10-28
 
-  greenstone_nath_2024:
-    title: Do Renewable Portfolio Standards Deliver Cost-Effective Carbon Abatement? (BFI Working Paper 2019-62, updated July 2024; not yet peer reviewed)
+  greenstone_nath_2026:
+    title: Do Renewable Portfolio Standards Deliver Cost-Effective Carbon Abatement? (BFI Working Paper 2019-62, revised June 2026; accepted by the Journal of Political Economy Microeconomics, not yet published)
     authors: Michael Greenstone, Ishan Nath
-    year: 2024
+    year: 2026
+    doi: 10.2139/ssrn.3374942
     url: https://bfi.uchicago.edu/working-paper/do-renewable-portfolio-standards-deliver-cost-effective-carbon-abatement/
     source: bfi_working_papers
     peer_reviewed: false
+    accessed: 2026-10-28
+
+  azevedo_sun_2025:
+    title: Indirect Effects of Renewable Portfolio Standards on Carbon Emissions (working paper, 20 October 2025; not peer reviewed)
+    authors: Mathew Azevedo, Jeffrey Sun
+    year: 2025
+    url: https://jeffreyesun.com/RPS.pdf
+    source: author_working_papers
+    peer_reviewed: false
+    accessed: 2026-10-28
+
+  martin_saikawa_2017:
+    title: Effectiveness of state climate and energy policies in reducing power-sector CO2 emissions
+    authors: Geoff Martin, Eri Saikawa
+    year: 2017
+    doi: 10.1038/s41558-017-0001-0
+    url: https://doi.org/10.1038/s41558-017-0001-0
+    source: nature_portfolio
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  deschenes_2023:
+    title: "Causal effects of Renewable Portfolio Standards on renewable investments and generation: The role of heterogeneity and dynamics"
+    authors: Olivier Deschenes, Christopher Malloy, Gavin McDonald
+    year: 2023
+    doi: 10.1016/j.reseneeco.2023.101393
+    url: https://doi.org/10.1016/j.reseneeco.2023.101393
+    source: elsevier
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  huseynov_palma_2018:
+    title: Does California's Low Carbon Fuel Standards reduce carbon dioxide emissions?
+    authors: Samir Huseynov, Marco A. Palma
+    year: 2018
+    doi: 10.1371/journal.pone.0203167
+    url: https://doi.org/10.1371/journal.pone.0203167
+    source: plos
+    peer_reviewed: true
+    accessed: 2026-10-28
+
+  coglianese_2020:
+    title: The Effects of Fuel Prices, Environmental Regulations, and Other Factors on U.S. Coal Production, 2008-2016
+    authors: John Coglianese, Todd D. Gerarden, James H. Stock
+    year: 2020
+    doi: 10.5547/01956574.41.1.jcog
+    url: https://doi.org/10.5547/01956574.41.1.jcog
+    source: iaee
+    peer_reviewed: true
     accessed: 2026-10-28
 
   carley_2018:

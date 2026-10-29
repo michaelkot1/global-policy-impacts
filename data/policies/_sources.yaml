@@ -143,7 +143,7 @@ sources:
     name: Nature Portfolio
     publisher: Springer Nature
     url: https://www.nature.com/
-    description: Peer-reviewed articles (Nature Energy).
+    description: Peer-reviewed articles (Nature Energy, Nature Climate Change).
 
   aea_journals:
     name: American Economic Association journals
@@ -162,3 +162,21 @@ sources:
     publisher: University of Chicago Becker Friedman Institute for Economics
     url: https://bfi.uchicago.edu/working-papers/
     description: Working papers that are not (yet) peer reviewed.
+
+  plos:
+    name: PLOS ONE
+    publisher: Public Library of Science
+    url: https://journals.plos.org/plosone/
+    description: Peer-reviewed open-access articles.
+
+  iaee:
+    name: The Energy Journal
+    publisher: International Association for Energy Economics
+    url: https://www.iaee.org/en/publications/ejarticles.aspx
+    description: Peer-reviewed articles.
+
+  author_working_papers:
+    name: Author-hosted working papers
+    publisher: The authors
+    url: https://jeffreyesun.com/
+    description: Manuscripts posted by their authors that have not been peer reviewed.

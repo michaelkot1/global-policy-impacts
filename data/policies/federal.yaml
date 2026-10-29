@@ -11,6 +11,12 @@
 #     and every effect has at least one `citations` entry (evidence for the link).
 #   * Evidence tiers: A peer-reviewed quasi-experimental, B this site's own
 #     estimate, C associated / descriptive, D plausible mechanism, no measured effect.
+#   * Impact scores: an effect with a percent `estimate` (plus `unit`, `method` and a
+#     0-1 `confidence`) is scored -5..+5 by the loader. Tiers A and B must have one,
+#     C may, and D only for a modelled projection. An effect with no estimate is
+#     stored with score 0 and a basis of `unquantified` ("not estimated", not "no
+#     effect"), or `never_bound` when `applicability` is empty. See
+#     pipeline/policies/scoring.py.
 #
 # Status of every record was checked against sources dated through 2026-10-28.
 
@@ -290,10 +296,10 @@ policies:
         tier: D
         scope: transportation-sector CO2
         mechanism: >
-          Stricter fleet-average tailpipe GHG and fuel-economy limits cut CO2 per
-          vehicle-mile of new cars and light trucks, with the fleet turning over
-          gradually. Rebound driving offsets part of the effect. Modelled, not
-          measured.
+          Stricter fleet-average tailpipe GHG and fuel-economy limits are designed
+          to lower CO2 per vehicle-mile of new cars and light trucks, with the
+          fleet turning over gradually. Rebound driving would offset part of the
+          effect. Modelled, not measured.
         citations: [fr_2010_ld_ghg_cafe, jacobsen_2013]
 
   - slug: ld-ghg-cafe-my2017-2025
@@ -358,10 +364,15 @@ policies:
         tier: D
         scope: electric-power-sector CO2
         mechanism: >
-          Retrofit costs for older coal units accelerated retirements, which were
-          mostly replaced by lower-carbon gas and renewable generation. CO2 is a
-          co-benefit; no measured CO2 effect is recorded here.
-        citations: [fr_2012_mats]
+          Retrofit costs for older coal units can accelerate retirements, and
+          replacement gas and renewable generation usually emits less CO2 per MWh
+          than coal; CO2 is a co-benefit, not the target. Coglianese, Gerarden and Stock (2020, peer reviewed)
+          attribute 5.2 GW of the 7.2 GW rise in retirements planned for 2015 to
+          MATS, equal to 6.4 million short tons less coal burned (0.6% of 2014 US
+          coal production). That is a coal-use estimate, not a CO2 estimate: the
+          CO2 from replacement gas generation is not netted out, so the link
+          stays unquantified here.
+        citations: [fr_2012_mats, coglianese_2020]
 
   - slug: clean-power-plan-2015
     title: Clean Power Plan (CAA section 111(d) guidelines for existing power plants)
@@ -476,13 +487,23 @@ policies:
       - metric: co2
         direction: decrease
         tier: D
-        scope: economy-wide energy-related CO2
+        scope: economy-wide net greenhouse-gas emissions in 2030 (modelled projection, all gases)
+        estimate: -12.5
+        unit: percent
+        method: >
+          Projection from a nine-model comparison (Bistline et al. 2023). Across
+          the multi-sector models, economy-wide emissions in 2030 average 37%
+          below 2005 with the IRA and 28% below without it, so the law's effect
+          is (1 - 0.37) / (1 - 0.28) - 1 = -12.5%. Modelled for the law as passed
+          in 2022, before the 2025 reconciliation law curtailed it, and covers all
+          greenhouse gases rather than energy CO2 alone. Nothing has been
+          measured, so the link stays at tier D.
+        confidence: 0.15
         mechanism: >
           Tax credits and incentives lower the cost of clean electricity, EVs and
-          efficiency. A multi-model comparison projected economy-wide emissions
-          43-48% below 2005 levels by 2035 under the original law; these are
-          model projections of the original law, not measured effects, and
-          predate the 2025 changes.
+          efficiency. The same comparison projects emissions 43-48% below 2005
+          levels by 2035 with the IRA, against 27-35% without it. Most of the
+          projected reduction comes from the power sector.
         citations: [pl_117_169, bistline_2023, crs_in12624_ira_repeal]
 
   # ── Executive orders ───────────────────────────────────────────────────

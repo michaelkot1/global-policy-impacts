@@ -9,8 +9,8 @@ Primary path
     * **2010–2019:** ``nst-est2020-alldata.csv`` (vintage 2020).
     * **2000–2009:** ``st-est00int-alldata.csv`` (2000-2010 intercensal,
       demographic breakdown filtered to totals).
-    * **1990–1999:** ``st-99-03.txt`` (fixed-width time-series with two
-      blocks: 1994-1999 and 1990-1993).
+    * **1990–1999:** ``stch-icen{year}.txt`` (1990-2000 intercensal county
+      files, summed to states; same series EIA uses for per-capita emissions).
     * **1980–1990:** ``st8090ts.txt`` (state-abbreviation rows, year
       columns, two blocks).
     * **1970–1979:** ``pe-19.csv`` (age × race × sex CSV; summed across
@@ -116,9 +116,9 @@ _MODERN_FILES: list[dict[str, Any]] = [
 ]
 
 # Pre-2000 text/CSV files.
-_1990S_URL = (
+_1990S_ICEN_BASE = (
     "https://www2.census.gov/programs-surveys/popest/"
-    "tables/1990-2000/state/totals/st-99-03.txt"
+    "tables/1990-2000/intercensal/st-co"
 )
 _1980S_URL = (
     "https://www2.census.gov/programs-surveys/popest/"
@@ -299,100 +299,46 @@ def _download_and_parse_modern(spec: dict[str, Any]) -> pd.DataFrame | None:
 
 
 # =====================================================================
-#  1990s: st-99-03.txt — fixed-width with two blocks
+#  1990s: intercensal county files summed to states
 # =====================================================================
 
 def _fetch_1990s() -> pd.DataFrame | None:
-    """Parse the Census st-99-03.txt file for 1990-1999 population."""
-    dest = RAW_DIR / "census_pop_1990s.txt"
-    try:
-        text = _download(_1990S_URL, dest)
-    except Exception as exc:
-        logger.warning("Could not download 1990s population: %s", exc)
+    """Sum the Census 1990-2000 *intercensal* county files to state totals.
+
+    The older ``st-99-03.txt`` table holds the 1999 *postcensal* vintage, which
+    was never revised after the 2000 census.  For fast-growing states that leaves a
+    jump of up to ~12% between 1999 and 2000 (Nevada, DC, Arizona), and per-capita
+    emissions in the 1990s come out too high.  The intercensal files
+    (``stch-icen{year}.txt``: year, 5-digit county FIPS, age, sex, race/origin
+    group, population) are the revised series EIA itself uses for its per-capita
+    table, so summing them by state FIPS reproduces EIA's denominators exactly.
+    """
+    totals: dict[tuple[str, int], float] = {}
+    for year in range(1990, 2000):
+        dest = RAW_DIR / f"census_pop_{year}_icen.txt"
+        url = f"{_1990S_ICEN_BASE}/stch-icen{year}.txt"
+        try:
+            text = _download(url, dest)
+        except Exception as exc:
+            logger.warning("Could not download 1990s intercensal %d: %s", year, exc)
+            return None
+        for line in text.splitlines():
+            parts = line.split()
+            if len(parts) < 6 or len(parts[1]) != 5:
+                continue
+            fips = parts[1][:2]
+            if fips not in _VALID_FIPS:
+                continue
+            key = (fips, year)
+            totals[key] = totals.get(key, 0.0) + float(parts[-1])
+
+    if not totals:
+        logger.warning("No data extracted from 1990s intercensal files")
         return None
 
-    rows: list[dict[str, Any]] = []
-    lines = text.split("\n")
-
-    # The file has two blocks of data, each starting with a date-header row.
-    # Block 1: 7/1/99  7/1/98  7/1/97  7/1/96  7/1/95  7/1/94
-    # Block 2: 7/1/93  7/1/92  7/1/91  7/1/90  4/1/90
-    block_idx = 0
-    while block_idx < len(lines):
-        # Find date-header row: contains multiple "7/1/YY" or "4/1/YY" patterns
-        header_line = lines[block_idx]
-        date_matches = re.findall(r"(\d/\d/(\d{2})|\d/1/(\d{4}))", header_line)
-        if len(date_matches) < 3:
-            block_idx += 1
-            continue
-
-        # Extract years from dates like "7/1/99" → 1999 or "4/1/90" → 1990
-        year_positions: list[tuple[int, int]] = []  # (char_start, year)
-        for m in re.finditer(r"\d/\d{1,2}/(\d{2,4})", header_line):
-            yr_str = m.group(1)
-            yr = int(yr_str)
-            if yr < 100:
-                yr += 1900 if yr >= 70 else 2000
-            year_positions.append((m.start(), yr))
-
-        if not year_positions:
-            block_idx += 1
-            continue
-
-        # Skip the sub-header lines (Population/Estimate/dashes)
-        data_start = block_idx + 1
-        while data_start < len(lines):
-            l = lines[data_start].strip()
-            if (not l or "Population" in l or "Estimate" in l
-                    or "Census" in l or l.startswith("--")
-                    or l.startswith("Block") or l.startswith("Number")):
-                data_start += 1
-            else:
-                break
-
-        # Parse state data rows
-        for i in range(data_start, len(lines)):
-            line = lines[i]
-            if not line.strip():
-                block_idx = i + 1
-                break
-
-            # Format: "  1    Alabama                      4369862 ..."
-            # Extract the state name after the block number
-            name_match = re.match(
-                r"\s*\d+\s+(.+?)\s{2,}([\d\s]+)$", line
-            )
-            if not name_match:
-                continue
-
-            state_name = name_match.group(1).strip().lower()
-            fips = _NAME_TO_FIPS.get(state_name)
-            if fips is None:
-                continue
-
-            # Extract numeric values by their character positions
-            numbers_str = name_match.group(2)
-            values = [int(v) for v in numbers_str.split()]
-
-            for idx, (_, yr) in enumerate(year_positions):
-                if idx < len(values):
-                    rows.append({
-                        "fips": fips,
-                        "year": yr,
-                        "value": float(values[idx]),
-                    })
-        else:
-            block_idx = len(lines)
-
-    if not rows:
-        logger.warning("No data extracted from 1990s population file")
-        return None
-
-    # Drop the 4/1/90 census count (we'll use the 7/1/90 estimate from 1980s
-    # file or dedup will keep whichever comes first)
-    result = pd.DataFrame(rows)
-    # Keep only 1990-1999 (the file may include a 4/1/1990 census column)
-    result = result[(result["year"] >= 1990) & (result["year"] <= 1999)]
+    result = pd.DataFrame(
+        [{"fips": f, "year": y, "value": v} for (f, y), v in totals.items()]
+    )
     logger.info(
         "  1990s → %d rows, years %d–%d",
         len(result),
