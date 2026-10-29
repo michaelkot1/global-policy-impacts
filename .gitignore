@@ -8,6 +8,8 @@ data/raw/
 
 # Built database (reproducible from pipeline)
 data/app.db
+data/app.db-shm
+data/app.db-wal
 
 # Python
 __pycache__/
