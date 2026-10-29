@@ -15,6 +15,7 @@ from pathlib import Path
 
 import schema
 import seed
+from analysis import event_study
 from policies import load as policy_load
 from sources import bea_gdp, census_pop, eia_co2
 
@@ -57,6 +58,9 @@ def main() -> None:
     # ── Load the hand-curated policy catalog (data/policies/*.yaml) ────
     policy_stats = policy_load.load_policies(conn)
 
+    # ── Tier-B estimates: staggered DiD / event study for RPS and RGGI ─
+    event_studies = event_study.run_event_study(conn)
+
     # ── Summary ────────────────────────────────────────────────────────
     n_jur = conn.execute("SELECT count(*) FROM jurisdictions").fetchone()[0]
     n_src = conn.execute("SELECT count(*) FROM sources").fetchone()[0]
@@ -88,6 +92,8 @@ def main() -> None:
         f"{policy_stats['effects']} policy-metric effects, "
         f"{policy_stats['citations']} citations)"
     )
+    print(f"  {len(event_studies)} tier-B event-study estimates:")
+    print("\n".join("    " + line for line in event_study.format_summary(event_studies).splitlines()))
 
     conn.close()
 

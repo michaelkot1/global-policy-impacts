@@ -73,7 +73,9 @@ Evidence rules checked by the loader
 ------------------------------------
 * Every effect cites at least one source that exists in the citations registry.
 * Tier A requires a peer-reviewed citation with a DOI.
-* Tiers A and B must carry a percent estimate (that is what the tier certifies). Tier C
+* Tiers A and B must carry a percent estimate (that is what the tier certifies). The site's
+  own tier-B rows are not written here: ``analysis/event_study.py`` adds them, as
+  ``estimate_source = 'event_study'`` rows beside the catalog's row for the same policy. Tier C
   may carry one (an associated, non-causal change) and tier D only a modelled
   projection; both may also have none.
 * An estimate needs a unit of ``percent``, a ``method`` and a ``confidence`` (0-1,
@@ -731,14 +733,17 @@ def _write(conn: sqlite3.Connection, prepared: Prepared) -> dict[str, int]:
                 (*fields, pol["slug"]),
             ).lastrowid
 
-        # Replace the catalog-managed children. Tier B rows come from the event study,
-        # which runs after this loader, so they are left alone.
+        # Replace the catalog-managed children. Rows from the event study
+        # (estimate_source 'event_study') come from analysis/event_study.py, which runs
+        # after this loader, so they are left alone.
         conn.execute(
             "DELETE FROM policy_effect_citations WHERE policy_effect_id IN "
-            "(SELECT id FROM policy_effects WHERE policy_id = ? AND evidence_tier != 'B')",
+            "(SELECT id FROM policy_effects WHERE policy_id = ? AND estimate_source = 'catalog')",
             (policy_id,),
         )
-        conn.execute("DELETE FROM policy_effects WHERE policy_id = ? AND evidence_tier != 'B'", (policy_id,))
+        conn.execute(
+            "DELETE FROM policy_effects WHERE policy_id = ? AND estimate_source = 'catalog'", (policy_id,)
+        )
         conn.execute("DELETE FROM policy_applicability WHERE policy_id = ?", (policy_id,))
         conn.execute("DELETE FROM policy_citations WHERE policy_id = ?", (policy_id,))
 
@@ -759,18 +764,6 @@ def _write(conn: sqlite3.Connection, prepared: Prepared) -> dict[str, int]:
         stats["applicability"] += len(pol["applicability"])
 
         for eff in pol["effects"]:
-            existing = conn.execute(
-                "SELECT evidence_tier FROM policy_effects WHERE policy_id = ? AND metric_id = ?",
-                (policy_id, eff["metric_id"]),
-            ).fetchone()
-            if existing:
-                logger.warning(
-                    "policy %s / metric %s already has a tier %s row; skipping the catalog's tier %s row "
-                    "(policy_effects allows one row per policy and metric)",
-                    pol["slug"], eff["metric"], existing[0], eff["tier"],
-                )
-                stats["effects_skipped"] += 1
-                continue
             effect_id = conn.execute(
                 "INSERT INTO policy_effects (policy_id, metric_id, mechanism, scope, expected_direction, "
                 "evidence_tier, effect_estimate, effect_low, effect_high, effect_unit, method, "
