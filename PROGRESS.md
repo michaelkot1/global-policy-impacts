@@ -4,6 +4,25 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · web-state
+
+Built `/states/[state]` (slugs like `california`, `district-of-columbia`; all 51 are prerendered). Each page has three headline figures (total, per capita, per GDP, with rank and change since 1990 and 2005), a stacked sector chart with a Total / Per capita / Per GDP toggle, dashed markers for the year each policy starts to apply (numbered to match the list), a rank-history chart, and a filterable list of the policies that applied to the state with their dates, status, evidence tier, impact score, confidence and citations. The ranking table and the state panel on `/metrics/co2` now link to the state pages. `tsc`, `eslint` and `next build` pass, and I checked New Jersey, California and DC in a browser (toggle, per-GDP gap before 1997, hover highlight of a policy's span).
+
+**Issues**
+
+- A policy is attached to a state if it has an applicability row for the state or for the United States (that is how federal laws and the Paris Agreement are stored). Markers are drawn at the calendar year of each period's start date, so a policy effective in December sits on that year's point. Policies that start after 2022 (for example California's ACC II rule and some RGGI re-entries) appear in the list but have no marker.
+- The effect estimates shown on a state page are for the policy's whole study sample (all RGGI states, or the states that adopted an RPS), not for that state alone, and the page says so. Where a policy has both a published and a tier-B row, the published row is first, then this site's own estimates with power-sector before per capita. Tier-B rows show the pre-trend p-value, and a warning when it is below 0.10 (three of the four are), because those estimates probably overstate the effect.
+- Policies with `unquantified` basis show "Effect on CO₂ not estimated. This is not the same as no effect." and their score is not displayed. Catalog "low/high" values are labelled "range across specifications", and only event-study rows are labelled "95% interval", as the evidence entry required.
+- Marker labels crowd where many federal laws start in the same few years (1990 and 2021–2022); the label collapses to a range like "13–17" and the tooltip lists them. There are 17 to 23 markers per state, so the chart is busy, and I have not tried a lane layout.
+- Policy titles link to each policy's official URL, not to `/policies/[id]`, because that page does not exist yet. Swap them when the catalog pages land.
+- With Cache Components, an unknown slug such as `/states/narnia` renders the 404 page but the HTTP status is 200, because the page streams inside `<Suspense>` (needed so `params` is not read outside it). A real 404 status would need a runtime check outside the page, or a different structure.
+- The rank chart is zoomed to the state's own range (best rank minus 2 to worst plus 2), so a flat line for a state that never moves can look more dramatic than it is; read the y-axis labels. Ranks use all 51 jurisdictions including DC and are ties-share-the-best-rank.
+- The page ships one state's data (about 170 KB of HTML with the policy list), which is fine, but every policy's citations are included whether or not the details panel is opened.
+- There is no `/states` index page, so state pages are reached from the rankings table, the state panel, or by URL. The root layout still has no navigation. Browser testing with the browser tool's accessibility snapshot injects `data-cursor-ref` attributes that cause hydration warnings in dev; they are not from the app, but running `next dev` and `next build` at the same time broke the production assets once, so I rebuilt from a clean `.next`.
+- No automated tests; I checked rank values and the NJ and CA figures by eye (California 2nd of 51 in total since the 1970s, 2022 total 326 Mt) and not against an independent calculation.
+
+---
+
 ## 2026-10-28 · web-rankings
 
 Built `/metrics/co2` in the Next.js app: a state choropleth (us-atlas, drawn with d3-geo), a sortable ranking table with change since 1990 and 2005, a year slider (1970–2022, with play/pause), a Total / Per capita / Per GDP toggle driven by the metric's `allow_*` flags, a sector filter, a selected-state history chart, and a sources and method section linking to EIA, Census and BEA. The server reads `data/app.db` once (`src/lib/db.ts`, `src/lib/co2-data.ts`, cached with `use cache`) and the client recomputes values, ranks and colour classes instantly; the view is kept in the URL (`?norm=&sector=&year=&state=`) so it can be shared. `tsc`, `eslint` and `next build` pass, and I checked the page in a browser (toggle, slider, play, map click, per-GDP year clamp).

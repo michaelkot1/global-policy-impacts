@@ -38,6 +38,14 @@ export const NORM_UNITS: Record<Norm, { short: string; long: string }> = {
   },
 };
 
+/** URL slug of a state page, e.g. "District of Columbia" -> "district-of-columbia". */
+export function stateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export interface StateShape {
   code: string; // FIPS, e.g. "06"
   name: string;

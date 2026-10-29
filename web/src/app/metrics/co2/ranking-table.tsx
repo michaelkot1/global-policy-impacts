@@ -1,6 +1,7 @@
 "use client";
 
-import { formatPercentChange, formatValue } from "@/lib/co2-model";
+import Link from "next/link";
+import { formatPercentChange, formatValue, stateSlug } from "@/lib/co2-model";
 import { PALETTE } from "./us-map";
 
 export interface Row {
@@ -109,7 +110,7 @@ export function RankingTable({
                   type="button"
                   onClick={() => onSelect(r.index)}
                   aria-pressed={r.index === selected}
-                  className="flex items-center gap-2 rounded text-left font-medium hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="inline-flex items-center gap-2 rounded text-left font-medium hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   <span
                     aria-hidden
@@ -118,6 +119,14 @@ export function RankingTable({
                   />
                   {r.name}
                 </button>
+                <Link
+                  href={`/states/${stateSlug(r.name)}`}
+                  aria-label={`${r.name} state page`}
+                  title={`${r.name} state page`}
+                  className="ml-1.5 rounded text-xs text-zinc-400 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  <span aria-hidden>↗</span>
+                </Link>
               </td>
               <td className="px-2 py-1.5 text-right tabular-nums">{formatValue(r.value)}</td>
               <td className="px-2 py-1.5 text-right tabular-nums text-zinc-600 dark:text-zinc-400">

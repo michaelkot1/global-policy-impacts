@@ -10,7 +10,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatPercentChange, formatValue } from "@/lib/co2-model";
+import Link from "next/link";
+import { formatPercentChange, formatValue, stateSlug } from "@/lib/co2-model";
 
 interface Props {
   name: string;
@@ -61,6 +62,12 @@ export function StatePanel({
             )}
           </p>
         </div>
+        <Link
+          href={`/states/${stateSlug(name)}`}
+          className="ml-auto rounded px-2 py-1 text-xs font-medium underline underline-offset-2 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        >
+          Policies and rank history
+        </Link>
         <button
           type="button"
           onClick={onClear}
