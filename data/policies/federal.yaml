@@ -296,10 +296,10 @@ policies:
         tier: D
         scope: transportation-sector CO2
         mechanism: >
-          Stricter fleet-average tailpipe GHG and fuel-economy limits cut CO2 per
-          vehicle-mile of new cars and light trucks, with the fleet turning over
-          gradually. Rebound driving offsets part of the effect. Modelled, not
-          measured.
+          Stricter fleet-average tailpipe GHG and fuel-economy limits are designed
+          to lower CO2 per vehicle-mile of new cars and light trucks, with the
+          fleet turning over gradually. Rebound driving would offset part of the
+          effect. Modelled, not measured.
         citations: [fr_2010_ld_ghg_cafe, jacobsen_2013]
 
   - slug: ld-ghg-cafe-my2017-2025
@@ -364,9 +364,9 @@ policies:
         tier: D
         scope: electric-power-sector CO2
         mechanism: >
-          Retrofit costs for older coal units accelerated retirements, which were
-          mostly replaced by lower-carbon gas and renewable generation. CO2 is a
-          co-benefit. Coglianese, Gerarden and Stock (2020, peer reviewed)
+          Retrofit costs for older coal units can accelerate retirements, and
+          replacement gas and renewable generation usually emits less CO2 per MWh
+          than coal; CO2 is a co-benefit, not the target. Coglianese, Gerarden and Stock (2020, peer reviewed)
           attribute 5.2 GW of the 7.2 GW rise in retirements planned for 2015 to
           MATS, equal to 6.4 million short tons less coal burned (0.6% of 2014 US
           coal production). That is a coal-use estimate, not a CO2 estimate: the

@@ -52,15 +52,21 @@ policies:
       - metric: co2
         direction: decrease
         tier: A
-        scope: electric-power-sector CO2, RGGI states (counterfactual effect after 2009)
+        scope: electric-power-sector CO2, RGGI states (counterfactual effect over the first years after 2009)
         estimate: -19.4
         unit: percent
         method: >
-          Panel regression of power-sector CO2 for the 48 contiguous states,
-          1991-2012, with counterfactual simulation (Murray and Maniloff 2015).
-          The paper reports that emissions would have been 24% higher without
-          RGGI; the percent change shown is derived as 1/1.24 - 1 = -19.4% and
-          has no published confidence interval here.
+          Econometric panel model of power-sector demand, generation by fuel and
+          CO2 for the 48 contiguous states (state fixed effects, an RGGI-period
+          indicator, and the non-RGGI states as the comparison), used to simulate
+          a no-RGGI counterfactual (Murray and Maniloff 2015; the working-paper
+          version uses 1991-2011 data, so the window after 2009 is short). This
+          is a controlled panel comparison, a looser design than a synthetic
+          control or an event study, and the authors say the RGGI price effect
+          cannot be cleanly separated from a general programme effect. The paper
+          reports that emissions would have been 24% higher without RGGI; the
+          percent change shown is derived as 1/1.24 - 1 = -19.4% and has no
+          confidence interval here.
         confidence: 0.6
         mechanism: >
           A declining CO2 cap on power plants raises the cost of coal and gas

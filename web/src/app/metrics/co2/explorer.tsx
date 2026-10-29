@@ -87,7 +87,10 @@ export function Co2Explorer({ ds, initial }: { ds: Co2Dataset; initial: InitialV
       .filter((x): x is { v: number; i: number } => x.v != null)
       .sort((a, b) => b.v - a.v);
     const ranks: (number | null)[] = new Array(n).fill(null);
-    order.forEach((x, k) => (ranks[x.i] = k + 1));
+    // Tied values share the better rank, as on the state pages and the methodology page.
+    order.forEach((x, k) => {
+      ranks[x.i] = k > 0 && x.v === order[k - 1].v ? ranks[order[k - 1].i] : k + 1;
+    });
 
     const change = (s: number, base: number) => {
       const bi = ds.years.indexOf(base);
