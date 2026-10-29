@@ -4,6 +4,22 @@ One entry per completed plan to-do, newest first. Each entry has a 2–3 sentenc
 
 ---
 
+## 2026-10-28 · web-rankings
+
+Built `/metrics/co2` in the Next.js app: a state choropleth (us-atlas, drawn with d3-geo), a sortable ranking table with change since 1990 and 2005, a year slider (1970–2022, with play/pause), a Total / Per capita / Per GDP toggle driven by the metric's `allow_*` flags, a sector filter, a selected-state history chart, and a sources and method section linking to EIA, Census and BEA. The server reads `data/app.db` once (`src/lib/db.ts`, `src/lib/co2-data.ts`, cached with `use cache`) and the client recomputes values, ranks and colour classes instantly; the view is kept in the URL (`?norm=&sector=&year=&state=`) so it can be shared. `tsc`, `eslint` and `next build` pass, and I checked the page in a browser (toggle, slider, play, map click, per-GDP year clamp).
+
+**Issues**
+
+- The page embeds the whole dataset (51 states × 53 years × 6 sectors, plus population and GDP) so the controls respond without a round trip. That makes the HTML about 695 KB (about 256 KB gzipped), because Next sends the data both in the markup and in the client payload. I rounded values and map paths to cut it; moving the data to a cached JSON route handler would shrink it further if load time matters.
+- Per GDP uses BEA GDP in current dollars and starts in 1997, so the slider range becomes 1997–2022 for that measure and the figures fall partly because prices rise. The page says so; the requested year is restored if you switch back to another measure. Population is interpolated before 2000 (per the metric's methodology note).
+- Colour classes are quantiles of every state-year value for the chosen sector and measure (not of the single year shown), so colours stay comparable while the slider moves. A state's colour therefore says "high or low across 1970–2022", not "top fifth this year"; the rank column and table give the within-year ordering.
+- The United States figure shown is the sum of the 50 states and DC, not the stored US row, so all three measures use the same basis. State names are not yet links because `/states/[state]` does not exist yet; selecting a state shows an in-page history chart instead.
+- Hawaii and Alaska appear in the Albers inset layout, and DC is too small to click on the map, so it has an invisible larger hit area; keyboard users get the same data through the table (the map is a labelled image, not tab stops).
+- Opening `data/app.db` read-only creates `app.db-shm` and `app.db-wal` next to it because the pipeline leaves the database in WAL mode. They are untracked and I did not commit or ignore them; they may need adding to `.gitignore`. The root layout metadata is still the "Create Next App" default and there is no site navigation yet, so I only set the page's own title.
+- There are no automated tests for the page or the normalization maths; I checked values by eye (United States 2022 total 4,934 Mt, Texas first) and not against an independent calculation.
+
+---
+
 ## 2026-10-28 · event-study
 
 Implemented `pipeline/analysis/event_study.py`: a staggered difference-in-differences (the Borusyak–Jaravel–Spiess imputation estimator, with state and year fixed effects and a log-population control) for state RPS and RGGI, run on two outcomes (electric-power-sector CO₂ and total CO₂ per capita). It writes four tier-B rows to `policy_effects` with 95 % bootstrap intervals, impact scores and confidence, plus year-by-year event-time coefficients (`policy_effect_event_time`) and diagnostics (`policy_effect_checks`: pre-trend test, randomisation-inference p-value, four robustness specifications), and `build_db.py` now runs it after the catalog loads. The headline results are RGGI −29.9 % power-sector CO₂ (CI −40.8 to −12.0) and −10.0 % CO₂ per capita, and RPS −5.9 % power-sector CO₂ (CI −13.7 to +3.4, not significant) and −5.4 % per capita; the published rows (RGGI −19.4 % tier A, RPS −12.5 % tier C) are kept beside them.
